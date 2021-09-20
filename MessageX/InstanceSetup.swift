@@ -8,30 +8,31 @@ import SwiftUI
 import Foundation
 
 
-class InstanceSetup: ObservableObject {
-    var code: Array<Int>
-    var persistcode: Array<Int>
-    @Published var message: String
+struct InstanceSetup {
     
-    init() {
+    init(_loginSuccess: Binding<Bool>, message: Binding<String>, image: Image) {
         code = []
         //TODO retreive from mem
         persistcode = [1,2,3,4,5,6]
-        message = "MessageX"
+        self.image = image
+        loginSuccess = _loginSuccess
     }
     
-    func append(a: Int) {
+    mutating func append(a: Int) {
         code.insert(a, at: code.count)
         //Fill bubble
         
         if code.count > 5 {
             if code == persistcode {
                 //Good entry
-                message = "Unlocking"
+                //message = "Unlocking"
+                code = []
+                image = Image("lock.open.fill")
+                
             } else {
                 //Bad entry
                 code = []
-                message = "Incorrect PIN"
+                //message = "Incorrect PIN"
                 //Clear bubbles, retry
             }
         }
