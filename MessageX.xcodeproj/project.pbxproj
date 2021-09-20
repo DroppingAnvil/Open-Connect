@@ -14,6 +14,8 @@
 		4C6B28FC26F6AFE500ABC502 /* MessageXTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C6B28FB26F6AFE500ABC502 /* MessageXTests.swift */; };
 		4C6B290626F6AFE500ABC502 /* MessageXUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C6B290526F6AFE500ABC502 /* MessageXUITests.swift */; };
 		4C6B290826F6AFE500ABC502 /* MessageXUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C6B290726F6AFE500ABC502 /* MessageXUITestsLaunchTests.swift */; };
+		4C6B291526F6C63600ABC502 /* InstanceSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C6B291426F6C63600ABC502 /* InstanceSetup.swift */; };
+		4C6B291726F7E7F000ABC502 /* Passkey in Resources */ = {isa = PBXBuildFile; fileRef = 4C6B291626F7E7F000ABC502 /* Passkey */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +46,8 @@
 		4C6B290126F6AFE500ABC502 /* MessageXUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MessageXUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C6B290526F6AFE500ABC502 /* MessageXUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageXUITests.swift; sourceTree = "<group>"; };
 		4C6B290726F6AFE500ABC502 /* MessageXUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageXUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		4C6B291426F6C63600ABC502 /* InstanceSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstanceSetup.swift; sourceTree = "<group>"; };
+		4C6B291626F7E7F000ABC502 /* Passkey */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Passkey; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,7 +101,9 @@
 				4C6B28EA26F6AFE100ABC502 /* MessageXApp.swift */,
 				4C6B28EC26F6AFE100ABC502 /* ContentView.swift */,
 				4C6B28EE26F6AFE500ABC502 /* Assets.xcassets */,
+				4C6B291626F7E7F000ABC502 /* Passkey */,
 				4C6B28F026F6AFE500ABC502 /* Preview Content */,
+				4C6B291426F6C63600ABC502 /* InstanceSetup.swift */,
 			);
 			path = MessageX;
 			sourceTree = "<group>";
@@ -231,6 +237,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C6B291726F7E7F000ABC502 /* Passkey in Resources */,
 				4C6B28F226F6AFE500ABC502 /* Preview Assets.xcassets in Resources */,
 				4C6B28EF26F6AFE500ABC502 /* Assets.xcassets in Resources */,
 			);
@@ -257,6 +264,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C6B291526F6C63600ABC502 /* InstanceSetup.swift in Sources */,
 				4C6B28ED26F6AFE100ABC502 /* ContentView.swift in Sources */,
 				4C6B28EB26F6AFE100ABC502 /* MessageXApp.swift in Sources */,
 			);
