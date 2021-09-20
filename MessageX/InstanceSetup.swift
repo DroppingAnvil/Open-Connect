@@ -8,28 +8,30 @@ import SwiftUI
 import Foundation
 
 
-class InstanceSetup {
+class InstanceSetup: ObservableObject {
     var code: Array<Int>
     var persistcode: Array<Int>
-    var lockScreen: ContentView
+    @Published var message: String
     
-    init(lockView: ContentView) {
+    init() {
         code = []
         //TODO retreive from mem
         persistcode = [1,2,3,4,5,6]
-        lockScreen = lockView
+        message = "MessageX"
     }
     
     func append(a: Int) {
         code.insert(a, at: code.count)
         //Fill bubble
         
-        if code.count > 4 {
+        if code.count > 5 {
             if code == persistcode {
                 //Good entry
+                message = "Unlocking"
             } else {
                 //Bad entry
                 code = []
+                message = "Incorrect PIN"
                 //Clear bubbles, retry
             }
         }
