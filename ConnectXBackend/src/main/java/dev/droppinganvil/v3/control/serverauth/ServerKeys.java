@@ -8,10 +8,10 @@ package dev.droppinganvil.v3.control.serverauth;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import dev.droppinganvil.v3.Configuration;
-import dev.droppinganvil.v3.EmbeddedAPI;
-import dev.droppinganvil.v3.ServerKey;
+import dev.droppinganvil.v3.ConnectXAPI;
 import dev.droppinganvil.v3.control.analytics.AnalyticData;
 import dev.droppinganvil.v3.control.analytics.Analytics;
+import dev.droppinganvil.v3.keychange.ServerKey;
 import me.droppinganvil.core.exceptions.TypeNotSetException;
 import me.droppinganvil.core.mysql.MySQL;
 import org.eclipse.jetty.util.ConcurrentHashSet;
@@ -38,13 +38,13 @@ public class ServerKeys implements HttpHandler {
             e.printStackTrace();
         }
         try {
-            ServerKey skr = EmbeddedAPI.serverKeyJsonAdapter.fromJson(httpe.getRequestBody().toString());
+            ServerKey skr = ConnectXAPI.serverKeyJsonAdapter.fromJson(httpe.getRequestBody().toString());
             ServerKey sk = getKey(skr.primaryKey);
             if (sk == null) return;
             if (skr.secondaryKey.equals(sk.secondaryKey)) {
                 //todo verify ip
                 sk.tempKey = UUID.randomUUID().toString();
-                httpe.getResponseBody().write(EmbeddedAPI.serverKeyJsonAdapter.toJson(sk).getBytes());
+                httpe.getResponseBody().write(ConnectXAPI.serverKeyJsonAdapter.toJson(sk).getBytes());
             }
         } catch (Exception e) {
             Analytics.addData(AnalyticData.Internal_Error, e);

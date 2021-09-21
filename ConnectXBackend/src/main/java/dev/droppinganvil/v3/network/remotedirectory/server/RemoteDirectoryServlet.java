@@ -1,4 +1,4 @@
-package dev.droppinganvil.v3.remotedirectory.server;
+package dev.droppinganvil.v3.network.remotedirectory.server;
 
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;

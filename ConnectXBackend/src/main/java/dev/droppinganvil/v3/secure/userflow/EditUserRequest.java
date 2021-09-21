@@ -1,9 +1,9 @@
 package dev.droppinganvil.v3.secure.userflow;
 
-import dev.droppinganvil.v3.IPXAccount;
+import dev.droppinganvil.v3.ConnectXAccount;
 
 public class EditUserRequest {
-    public IPXAccount user;
-    public IPXAccount newUser;
+    public ConnectXAccount user;
+    public ConnectXAccount newUser;
     public Boolean removeNew;
 }

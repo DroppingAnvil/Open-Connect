@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Twisted Palms Incorporated
+ * Copyright (c) 2021 Christopher Willett
  * All Rights Reserved.
  */
 
@@ -8,7 +8,7 @@ package dev.droppinganvil.v3.control;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import dev.droppinganvil.v3.Adapters;
-import dev.droppinganvil.v3.IPXAccount;
+import dev.droppinganvil.v3.ConnectXAccount;
 import dev.droppinganvil.v3.LoginForm;
 
 import java.io.IOException;
@@ -16,9 +16,9 @@ import java.io.IOException;
 public class LoginHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
-        String s = "doe";
+        String s;
         LoginForm lf = Adapters.loginFormjson.fromJson(httpExchange.getRequestBody().toString());
-        IPXAccount client = ClientData.login(lf.id, lf.auth);
+        ConnectXAccount client = ClientData.login(lf.id, lf.auth);
         if (client != null) {
             s = client.key;
         } else {

@@ -7,25 +7,31 @@ package dev.droppinganvil.v3;
 
 import com.squareup.moshi.JsonAdapter;
 import dev.droppinganvil.v3.control.Platform;
+import dev.droppinganvil.v3.keychange.ServerKey;
 import dev.droppinganvil.v3.keychange.LoginServer;
 import me.droppinganvil.core.mysql.MySQL;
 import okhttp3.Request;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class EmbeddedAPI {
+public class ConnectXAPI {
     public static MySQL productServer = new MySQL(Configuration.STORAGE_PAYMENT_USERNAME,Configuration.STORAGE_PAYMENT_PASS,"products",Configuration.STORAGE_PAYMENT_URL, Configuration.STORAGE_PAYMENT_SCHEMA);
-    public static EmbeddedAPI instance;
+    public static ConnectXAPI instance;
+    public static Map<String, Stringpeers = new ArrayList<>();
     public static ServerKey serverKey;
     private static String serverID;
     public static JsonAdapter<ServerKey> serverKeyJsonAdapter = Updater.moshi.adapter(ServerKey.class).lenient();
-    public static ConcurrentHashMap<String, IPXAccount> clientCache = new ConcurrentHashMap<>();
+    public static ConcurrentHashMap<String, ConnectXAccount> clientCache = new ConcurrentHashMap<>();
     public static Platform platform;
+    final static Logger logger = LoggerFactory.getLogger(ConnectXAPI.class);
 
-    public EmbeddedAPI() throws IOException {
+    public ConnectXAPI() throws IOException {
         serverKey = new ServerKey();
         serverKey.primaryKey = Configuration.INTERNAL_SERVERKEY1;
         serverKey.secondaryKey = Configuration.INTERNAL_SERVERKEY2;
@@ -44,29 +50,29 @@ public class EmbeddedAPI {
 
     }
     @Deprecated
-    public static IPXAccount getClient(String id) {
+    public static ConnectXAccount getClient(String id) {
         if (clientCache.containsKey(id)) return clientCache.get(id);
-        IPXAccount client = IPXAccount.requestData(id, serverKey.tempKey);
+        ConnectXAccount client = ConnectXAccount.requestData(id, serverKey.tempKey);
         clientCache.put(id, client);
         return client;
     }
 
-    public static IPXAccount getClient(String id, Boolean mustBeLoggedOn) throws IllegalAccessException {
+    public static ConnectXAccount getClient(String id, Boolean mustBeLoggedOn) throws IllegalAccessException {
         if (clientCache.containsKey(id)) return clientCache.get(id);
         if (mustBeLoggedOn) throw new IllegalAccessException();
-        IPXAccount client = IPXAccount.requestData(id, serverKey.tempKey);
+        ConnectXAccount client = ConnectXAccount.requestData(id, serverKey.tempKey);
         clientCache.put(id, client);
         return client;
     }
 
-    public static Boolean isSubscriptionValid(IPXAccount client, Product product) {
+    public static Boolean isSubscriptionValid(ConnectXAccount client, Product product) {
         if (client.subscriptions.containsKey(product)) {
             return client.subscriptions.get(product) > System.currentTimeMillis();
         }
         return false;
     }
 
-    public List<IPXAccount> getUpdates() {
+    public List<ConnectXAccount> getUpdates() {
         System.out.println("Making request to central server to retrieve updates");
         try {
             Clients clients = Updater.clientsJsonAdapter.fromJson(Updater.client.newCall(new Request.Builder().url(Configuration.INTERNAL_CENTRAL_URL + "updates")
@@ -80,7 +86,18 @@ public class EmbeddedAPI {
         }
     }
 
+    public Boolean authenticate(String id, String auth) {
+        if (clientCache.containsKey(id)) {
+            return clientCache.get(id).id.equals(auth);
+        } else {
+            //TODO load balancer
+            ConnectXAccount cxa = ConnectXAccount.requestData(id, serverKey.tempKey);
+            if (cxa == null) return false;
+            return cxa.disabled || cxa.key.equals(auth);
+        }
+    }
+
     public static class Clients {
-        List<IPXAccount> clients;
+        List<ConnectXAccount> clients;
     }
 }

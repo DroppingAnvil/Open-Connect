@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Twisted Palms Incorporated
+ * Copyright (c) 2021 Christopher Willett
  * All Rights Reserved.
  */
 

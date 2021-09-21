@@ -6,8 +6,6 @@
 package dev.droppinganvil.v3;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Configuration implements Serializable {
 
@@ -20,7 +18,6 @@ public class Configuration implements Serializable {
     public static final Integer rateLimitSleep = 1000;
     public static boolean controlServer = true;
     public static boolean handleAPI = true;
-    public static List<String> peers = new ArrayList<>();
     public static String WEBSERVER_HTTPS_BIND_HOSTNAME = "";
     public static Integer WEBSERVER_HTTPS_BIND_PORT = 443;
     public static String WEBSERVER_SSL_KEYSTORE = "JKS";

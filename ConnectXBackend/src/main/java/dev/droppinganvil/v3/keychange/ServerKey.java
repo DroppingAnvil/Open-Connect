@@ -1,4 +1,4 @@
-package dev.droppinganvil.v3;
+package dev.droppinganvil.v3.keychange;
 
 import me.droppinganvil.core.mysql.annotations.MemoryOnly;
 

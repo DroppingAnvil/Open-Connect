@@ -1,4 +1,4 @@
-package dev.droppinganvil.v3.remotedirectory;
+package dev.droppinganvil.v3.network.remotedirectory;
 
 import dev.droppinganvil.v3.utils.obj.IPXException;
 

@@ -5,19 +5,16 @@
 
 package dev.droppinganvil.v3.control;
 
-import com.sun.net.httpserver.HttpServer;
 import com.sun.net.httpserver.HttpsConfigurator;
 import com.sun.net.httpserver.HttpsParameters;
 import com.sun.net.httpserver.HttpsServer;
 import dev.droppinganvil.v3.Configuration;
-import dev.droppinganvil.v3.EmbeddedAPI;
-import dev.droppinganvil.v3.IPXAccount;
+import dev.droppinganvil.v3.ConnectXAPI;
+import dev.droppinganvil.v3.ConnectXAccount;
 import dev.droppinganvil.v3.control.analytics.AnalyticData;
 import dev.droppinganvil.v3.control.analytics.Analytics;
 import dev.droppinganvil.v3.control.paypal.requests.WebhookHandler;
 import dev.droppinganvil.v3.control.serverauth.ServerKeys;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.net.ssl.*;
 import java.io.FileInputStream;
@@ -27,9 +24,8 @@ import java.util.HashSet;
 
 public class ControlService {
     public static HashSet<String> servers = new HashSet<>();
-    public static EmbeddedAPI apiI;
-    final static Logger logger = LoggerFactory.getLogger(ControlService.class);
-    public static HttpServer server;
+    public static ConnectXAPI apiI;
+    public static HttpsServer server;
 
     public static void main(String[] args) throws Exception {
         try {
@@ -64,9 +60,9 @@ public class ControlService {
                 }
             });
             try {
-                apiI = new EmbeddedAPI();
+                apiI = new ConnectXAPI();
                 //todo remove dev access
-                IPXAccount admin = new IPXAccount();
+                ConnectXAccount admin = new ConnectXAccount();
                 admin.name = "Dropping Anvil";
                 admin.id = "DroppingAnvil";
                 admin.authorization = "root";
@@ -85,6 +81,7 @@ public class ControlService {
                 logger.error("");
                 Analytics.addData(AnalyticData.Critical_Error, e);
             }
+
             httpsServer.createContext("/payments", new WebhookHandler());
             httpsServer.setExecutor(null); // creates a default executor
             httpsServer.start();

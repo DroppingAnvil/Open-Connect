@@ -9,7 +9,7 @@ import com.squareup.moshi.FromJson;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import com.squareup.moshi.ToJson;
-import dev.droppinganvil.v3.IPXAccount;
+import dev.droppinganvil.v3.ConnectXAccount;
 import dev.droppinganvil.v3.control.paypal.*;
 import dev.droppinganvil.v3.control.paypal.requests.plans.PlanList;
 import dev.droppinganvil.v3.control.paypal.requests.products.ProductList;
@@ -27,7 +27,7 @@ public class ObjectBuilders {
     public static final JsonAdapter<Plan> planJSONAdapter = moshi.adapter(Plan.class).lenient();
     public static final JsonAdapter<PlanList> planListJsonAdapter = moshi.adapter(PlanList.class).lenient();
     public static final JsonAdapter<CreateSubscriptionBody> subscriptionJSONAdapter = moshi.adapter(CreateSubscriptionBody.class).lenient();
-    public static final JsonAdapter<IPXAccount> clientJsonAdap = moshi.adapter(IPXAccount.class).lenient();
+    public static final JsonAdapter<ConnectXAccount> clientJsonAdap = moshi.adapter(ConnectXAccount.class).lenient();
     public static final JsonAdapter<CaptureAuth> captureJson = moshi.adapter(CaptureAuth.class).lenient();
     @FromJson
     public EventType fromJSON(String json){

@@ -6,7 +6,7 @@
 package dev.droppinganvil.v3.control;
 
 import dev.droppinganvil.v3.Configuration;
-import dev.droppinganvil.v3.IPXAccount;
+import dev.droppinganvil.v3.ConnectXAccount;
 import me.droppinganvil.core.exceptions.TypeNotSetException;
 import me.droppinganvil.core.mysql.MySQL;
 
@@ -16,15 +16,15 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ClientData {
-    public static final MySQL clientServer = new MySQL(Configuration.STORAGE_USER_USERNAME, Configuration.STORAGE_USER_PASS, "Users", Configuration.STORAGE_USER_URL, IPXAccount.class, Configuration.STORAGE_USER_SCHEMA);
-    public static ConcurrentHashMap<String, IPXAccount> clientCache = new ConcurrentHashMap<>();
-    public static ConcurrentHashMap<String, IPXAccount> noauthclientCache = new ConcurrentHashMap<>();
+    public static final MySQL clientServer = new MySQL(Configuration.STORAGE_USER_USERNAME, Configuration.STORAGE_USER_PASS, "Users", Configuration.STORAGE_USER_URL, ConnectXAccount.class, Configuration.STORAGE_USER_SCHEMA);
+    public static ConcurrentHashMap<String, ConnectXAccount> clientCache = new ConcurrentHashMap<>();
+    public static ConcurrentHashMap<String, ConnectXAccount> noauthclientCache = new ConcurrentHashMap<>();
 
-    public static IPXAccount getClient(String id, Boolean mustBeLoggedOn) throws IOException, InstantiationException, TypeNotSetException, IllegalAccessException {
+    public static ConnectXAccount getClient(String id, Boolean mustBeLoggedOn) throws IOException, InstantiationException, TypeNotSetException, IllegalAccessException {
         if (clientCache.containsKey(id)) return clientCache.get(id);
         if (noauthclientCache.containsKey(id)) return noauthclientCache.get(id);
         if (mustBeLoggedOn) throw new IllegalAccessException();
-        IPXAccount controlClient;
+        ConnectXAccount controlClient;
         if (id.contains("@")) {
             controlClient = clientServer.getObject("email", id);
         } else {
@@ -39,7 +39,7 @@ public class ClientData {
         return getClient(id, false) != null;
     }
 
-    public static String createAccount(IPXAccount client, Boolean throughExternalAuth) {
+    public static String createAccount(ConnectXAccount client, Boolean throughExternalAuth) {
         try {
             if (!client.subscriptions.isEmpty()) return "Invalid Data - CAF001";
             if (client.products != null) return "Invalid Data - CAF002";
@@ -66,10 +66,10 @@ public class ClientData {
         return "An internal error has occurred - CAF009";
     }
 
-    public static IPXAccount login(String id, String auth) {
+    public static ConnectXAccount login(String id, String auth) {
         try {
             if (!doesAccountExist(id)) return null;
-            IPXAccount client = getClient(id, false);
+            ConnectXAccount client = getClient(id, false);
             if (clientCache.containsKey(client.id)) {
                 clientCache.replace(client.id, client);
             } else {
@@ -78,8 +78,8 @@ public class ClientData {
             if (!client.authorization.equals(auth)) return null;
             String uuid = UUID.randomUUID().toString();
             client.key = uuid;
-            IPXAccount level2 = new IPXAccount();
-            for (Field f : IPXAccount.class.getDeclaredFields()) {
+            ConnectXAccount level2 = new ConnectXAccount();
+            for (Field f : ConnectXAccount.class.getDeclaredFields()) {
                 if (!f.getName().equals("authorization")) {
                     f.set(level2, f.get(client));
                 }

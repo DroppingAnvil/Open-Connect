@@ -8,7 +8,7 @@ package dev.droppinganvil.v3.control.paypal.requests;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import com.sun.net.httpserver.HttpHandler;
-import dev.droppinganvil.v3.IPXAccount;
+import dev.droppinganvil.v3.ConnectXAccount;
 import dev.droppinganvil.v3.ProcessX.Logger;
 import dev.droppinganvil.v3.Product;
 import dev.droppinganvil.v3.control.ClientData;
@@ -76,7 +76,7 @@ public class WebhookHandler implements HttpHandler {    public static OkHttpClie
         Resource r = we.resource;
         String[] split = r.id.split("-");
         Product product = Product.valueOf(split[1]);
-        IPXAccount client = ClientData.getClient(split[2]);
+        ConnectXAccount client = ClientData.getClient(split[2]);
 
         Logger.log("Webhook: " + we.event_type.name() + " " + we.create_time + " " + we.summary + " " + we.resource.id + " " + client.email);
         switch (we.event_type) {

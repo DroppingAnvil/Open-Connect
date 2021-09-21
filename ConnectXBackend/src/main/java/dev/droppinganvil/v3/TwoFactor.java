@@ -7,7 +7,7 @@ package dev.droppinganvil.v3;
 
 public class TwoFactor {
     //TODO
-    public static Boolean authorized(IPXAccount client) {
+    public static Boolean authorized(ConnectXAccount client) {
         return true;
     }
 }

@@ -9,7 +9,7 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 
 public class AnvilApp extends Application {
-    public static IPXAccount client;
+    public static ConnectXAccount client;
     public static Stage primaryStage;
 
     @Override

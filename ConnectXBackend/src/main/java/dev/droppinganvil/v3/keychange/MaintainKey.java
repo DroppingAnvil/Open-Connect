@@ -5,13 +5,13 @@
 
 package dev.droppinganvil.v3.keychange;
 
-import dev.droppinganvil.v3.EmbeddedAPI;
+import dev.droppinganvil.v3.ConnectXAPI;
 
 public class MaintainKey implements Runnable{
     @Override
     public void run() {
         while(true) {
-            if (EmbeddedAPI.serverKey.valid < System.currentTimeMillis() - 4000) {
+            if (ConnectXAPI.serverKey.valid < System.currentTimeMillis() - 4000) {
 
             }
         }

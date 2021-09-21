@@ -3,7 +3,7 @@
  * All Rights Reserved.
  */
 
-package dev.droppinganvil.v3.login.processx;
+package dev.droppinganvil.v3.login.v3.client;
 
 import dev.droppinganvil.v3.Adapters;
 import dev.droppinganvil.v3.LoginForm;

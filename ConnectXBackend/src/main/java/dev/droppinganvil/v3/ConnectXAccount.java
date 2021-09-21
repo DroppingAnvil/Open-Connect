@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class IPXAccount implements Serializable {
+public class ConnectXAccount implements Serializable {
     public String id;
     public String email;
     public String name;
@@ -37,12 +37,12 @@ public class IPXAccount implements Serializable {
 
     public static OkHttpClient client = new OkHttpClient();
     private static final Moshi moshi = new Moshi.Builder().build();
-    public static final JsonAdapter<IPXAccount> clientJsonAdapter = moshi.adapter(IPXAccount.class).lenient();
+    public static final JsonAdapter<ConnectXAccount> clientJsonAdapter = moshi.adapter(ConnectXAccount.class).lenient();
 
-    public static IPXAccount requestData(String id, String tempKey) {
+    public static ConnectXAccount requestData(String id, String tempKey) {
         System.out.println("Making request to central server to retrieve client " + id);
         try {
-            IPXAccount dclient = clientJsonAdapter.fromJson(client.newCall(new Request.Builder().url(Configuration.INTERNAL_CENTRAL_URL + "clients")
+            ConnectXAccount dclient = clientJsonAdapter.fromJson(client.newCall(new Request.Builder().url(Configuration.INTERNAL_CENTRAL_URL + "clients")
                     .addHeader("client", id)
                     .addHeader("server", tempKey)
                     .build()).execute().body().string());

@@ -3,7 +3,7 @@ package dev.droppinganvil.v3.secure.userflow;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import dev.droppinganvil.v3.Adapters;
-import dev.droppinganvil.v3.IPXAccount;
+import dev.droppinganvil.v3.ConnectXAccount;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -14,9 +14,9 @@ public class EditUser implements HttpHandler {
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
         EditUserRequest eur = Adapters.editrequestjson.fromJson(httpExchange.getRequestBody().toString());
-        IPXAccount rU = eur.user;
+        ConnectXAccount rU = eur.user;
         if (ProcessX.userCache.containsKey(rU.id)) {
-            IPXAccount aru = ProcessX.userCache.get(rU.id);
+            ConnectXAccount aru = ProcessX.userCache.get(rU.id);
             if (rU.key.equals(aru.key)) {
                 if (!aru.isAdmin) {
                     httpExchange.sendResponseHeaders(403, "Insufficient Permissions".getBytes().length);
@@ -24,10 +24,10 @@ public class EditUser implements HttpHandler {
                     httpExchange.close();
                     return;
                 } else {
-                    IPXAccount newUser = eur.newUser;
+                    ConnectXAccount newUser = eur.newUser;
                     if (eur.removeNew) {
                         if (ProcessX.userCache.containsKey(newUser.id)) {
-                            IPXAccount registered = ProcessX.userCache.get(newUser.id);
+                            ConnectXAccount registered = ProcessX.userCache.get(newUser.id);
                             registered.isAdmin = false;
                             registered.key = null;
                             registered.authorization = UUID.randomUUID().toString();
@@ -58,8 +58,8 @@ public class EditUser implements HttpHandler {
                                 }
 
                             }
-                            IPXAccount user = ProcessX.userCache.get(newUser.id);
-                            for (Field f : IPXAccount.class.getDeclaredFields()) {
+                            ConnectXAccount user = ProcessX.userCache.get(newUser.id);
+                            for (Field f : ConnectXAccount.class.getDeclaredFields()) {
                                 String fn = f.getName();
                                 String old = f.get(user).toString();
                                 String neww = f.get(newUser).toString();
@@ -79,7 +79,7 @@ public class EditUser implements HttpHandler {
         }
     }
 
-    public String validateAccount(IPXAccount dc) throws IllegalAccessException, IOException, InstantiationException {
+    public String validateAccount(ConnectXAccount dc) throws IllegalAccessException, IOException, InstantiationException {
         if (!dc.subscriptions.isEmpty()) return "Invalid Data - CAF001";
         if (dc.products != null) return "Invalid Data - CAF002";
         if (dc.used_ips != null) return "Invalid Data - CAF003";
@@ -92,7 +92,7 @@ public class EditUser implements HttpHandler {
     }
     public boolean doesAccountExist(String id) throws IllegalAccessException, IOException, InstantiationException {
         if (ProcessX.userCache.containsKey(id)) return true;
-        IPXAccount c = ProcessX.users.getObject("id", id, IPXAccount.class);
+        ConnectXAccount c = ProcessX.users.getObject("id", id, ConnectXAccount.class);
         if (c != null) {
             ProcessX.userCache.put(id, c);
             return true;

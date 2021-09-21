@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2021 Twisted Palms Incorporated
+ * Copyright (c) 2021 Christopher Willett
  * All Rights Reserved.
  */
 
 package dev.droppinganvil.v3.control.serverauth;
 
-import dev.droppinganvil.v3.ServerKey;
+import dev.droppinganvil.v3.keychange.ServerKey;
 
 import java.util.Map;
 import java.util.UUID;
