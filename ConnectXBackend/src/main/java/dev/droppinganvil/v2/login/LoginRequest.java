@@ -6,6 +6,7 @@
 package dev.droppinganvil.v2.login;
 
 import dev.droppinganvil.v2.Adapters;
+import dev.droppinganvil.v2.Configuration;
 import dev.droppinganvil.v2.LoginForm;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -18,7 +19,7 @@ public class LoginRequest {
     public static String login(LoginForm lf, OkHttpClient httpClient) throws IOException {
         Response response =
                 httpClient.newCall(new Request.Builder()
-                        .url("https://192.168.254.151:9050/login")
+                        .url("https://"+Configuration.control+"."+Configuration.domain +"/api/v2/login")
                         .post(RequestBody.create(null, Adapters.loginFormjson.toJson(lf)))
                         .build()
                 ).execute();

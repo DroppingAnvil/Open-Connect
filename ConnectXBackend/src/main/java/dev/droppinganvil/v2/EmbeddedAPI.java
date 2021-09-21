@@ -72,7 +72,7 @@ public class EmbeddedAPI {
             Clients clients = Updater.clientsJsonAdapter.fromJson(Updater.client.newCall(new Request.Builder().url(Configuration.INTERNAL_CENTRAL_URL + "updates")
                     .addHeader("server", serverKey.tempKey)
                     .build()).execute().body().string());
-            System.out.println("Response received for subscription ");
+            System.out.println("Response received for ");
             return clients.clients;
         } catch (IOException e) {
             System.out.print(e);

@@ -15,6 +15,8 @@ import dev.droppinganvil.v2.control.analytics.AnalyticData;
 import dev.droppinganvil.v2.control.analytics.Analytics;
 import dev.droppinganvil.v2.control.paypal.requests.WebhookHandler;
 import dev.droppinganvil.v2.control.serverauth.ServerKeys;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.net.ssl.*;
 import java.io.FileInputStream;
@@ -24,34 +26,26 @@ import java.util.HashSet;
 
 public class ControlService {
     public static HashSet<String> servers = new HashSet<>();
-    private static HttpsServer server;
     public static EmbeddedAPI apiI;
+    final static Logger logger = LoggerFactory.getLogger(ControlService.class);
 
     public static void main(String[] args) throws Exception {
         try {
-            // setup the socket address
+            logger.info("Starting ConnectX instance");
             InetSocketAddress address = new InetSocketAddress("", 443);
-
-            // initialise the HTTPS server
+            logger.debug("Server address obtained");
             HttpsServer httpsServer = HttpsServer.create(address, 0);
             server = httpsServer;
+            logger.debug("Created HTTPS Server");
+            logger.info("Setting up HTTPS");
             SSLContext sslContext = SSLContext.getInstance("TLS");
-
-            // initialise the keystore
-            char[] password = Configuration.WEBSERVER_SSL_PASS.toCharArray();
             KeyStore ks = KeyStore.getInstance(Configuration.WEBSERVER_SSL_KEYSTORE);
             FileInputStream fis = new FileInputStream(Configuration.WEBSERVER_SSL_CERTNAME);
-            ks.load(fis, password);
-
-            // setup the key manager factory
+            ks.load(fis, Configuration.WEBSERVER_SSL_PASS.toCharArray());
             KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
-            kmf.init(ks, password);
-
-            // setup the trust manager factory
+            kmf.init(ks, Configuration.WEBSERVER_SSL_PASS.toCharArray());
             TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509");
             tmf.init(ks);
-
-            // setup the HTTPS context and parameters
             sslContext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
             httpsServer.setHttpsConfigurator(new HttpsConfigurator(sslContext) {
                 public void configure(HttpsParameters params) {
@@ -80,14 +74,14 @@ public class ControlService {
                 admin.disabled = false;
                 ClientData.clientCache.put("DroppingAnvil", admin);
                 //todo optimize order for stability
-                httpsServer.createContext("/slogin", new ServerKeys());
-                httpsServer.createContext("/login", new LoginHandler());
-                httpsServer.createContext("/createaccount", new CreateAccountHandler());
-                httpsServer.createContext("/clients", )
+                httpsServer.createContext("/api/v2/slogin", new ServerKeys());
+                httpsServer.createContext("/api/v2/login", new LoginHandler());
+                httpsServer.createContext("/api/v2/createaccount", new CreateAccountHandler());
+                httpsServer.createContext("/api/v2/clients", )
                 //Get PayPal token
                 //TODO Setup products
             } catch (Exception e) {
-                Logger.log("Failed to start core services");
+                logger.error("");
                 Analytics.addData(AnalyticData.Critical_Error, e);
             }
             httpsServer.createContext("/payments", new WebhookHandler());

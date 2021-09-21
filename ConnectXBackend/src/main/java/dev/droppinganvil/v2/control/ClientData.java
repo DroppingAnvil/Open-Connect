@@ -69,7 +69,7 @@ public class ClientData {
     public static IPXAccount login(String id, String auth) {
         try {
             if (!doesAccountExist(id)) return null;
-            IPXAccount client = getClient(id);
+            IPXAccount client = getClient(id, false);
             if (clientCache.containsKey(client.id)) {
                 clientCache.replace(client.id, client);
             } else {
