@@ -1,0 +1,12 @@
+/*
+ * Copyright (c) 2021 Twisted Palms Incorporated
+ * All Rights Reserved.
+ */
+
+package dev.droppinganvil.v3.control.paypal;
+
+public enum PlanStatus {
+    CREATED,
+    INACTIVE,
+    ACTIVE
+}

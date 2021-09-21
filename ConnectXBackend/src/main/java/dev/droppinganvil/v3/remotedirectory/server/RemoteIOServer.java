@@ -1,0 +1,10 @@
+package dev.droppinganvil.v3.remotedirectory.server;
+
+import dev.droppinganvil.v3.io.IOThread;
+
+import java.util.HashSet;
+
+public class RemoteIOServer {
+    public HashSet<IOThread> baseThreads = new HashSet<>();
+    public HTTPS
+}
