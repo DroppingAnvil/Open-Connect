@@ -1,8 +1,8 @@
 package dev.droppinganvil.v2.remotedirectory;
 
 import dev.droppinganvil.v2.Configuration;
-import dev.droppinganvil.v2.remotedirectory.io.IOJob;
-import dev.droppinganvil.v2.remotedirectory.io.IOThread;
+import dev.droppinganvil.v2.io.IOJob;
+import dev.droppinganvil.v2.io.IOThread;
 import dev.droppinganvil.v2.utils.permissions.BasicPermissionContainer;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;

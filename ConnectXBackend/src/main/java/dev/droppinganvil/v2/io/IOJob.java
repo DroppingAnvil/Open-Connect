@@ -1,4 +1,4 @@
-package dev.droppinganvil.v2.remotedirectory.io;
+package dev.droppinganvil.v2.io;
 
 import java.io.InputStream;
 import java.io.OutputStream;

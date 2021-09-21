@@ -1,4 +1,4 @@
-package dev.droppinganvil.v2.remotedirectory.io;
+package dev.droppinganvil.v2.io;
 
 import dev.droppinganvil.v2.Configuration;
 import dev.droppinganvil.v2.utils.obj.BaseStatus;

@@ -1,6 +1,6 @@
 package dev.droppinganvil.v2.remotedirectory.server;
 
-import dev.droppinganvil.v2.remotedirectory.io.IOThread;
+import dev.droppinganvil.v2.io.IOThread;
 
 import java.util.HashSet;
 
