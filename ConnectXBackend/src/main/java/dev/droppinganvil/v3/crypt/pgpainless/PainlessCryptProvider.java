@@ -3,38 +3,34 @@ package dev.droppinganvil.v3.crypt.pgpainless;
 import dev.droppinganvil.v3.crypt.core.CryptProvider;
 import dev.droppinganvil.v3.crypt.core.exceptions.DecryptionFailureException;
 import dev.droppinganvil.v3.crypt.core.exceptions.EncryptionFailureException;
-import org.bouncycastle.openpgp.PGPPublicKeyRing;
-import org.bouncycastle.openpgp.PGPSecretKeyRing;
+import org.bouncycastle.openpgp.*;
 import org.pgpainless.PGPainless;
 import org.pgpainless.encryption_signing.EncryptionOptions;
 import org.pgpainless.encryption_signing.EncryptionStream;
 import org.pgpainless.encryption_signing.ProducerOptions;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class PainlessCryptProvider extends CryptProvider {
 
     public PainlessCryptProvider() {
         super("PGP E2E Encryption", "Core");
     }
-    private static PGPSecretKeyRing secretKeys;
-    private static PGPPublicKeyRing publicKeys;
+    private static PGPSecretKeyRing secretKey;
+    private static PGPPublicKeyRingCollection publicKeys;
 
     @Override
     public void encrypt(InputStream is, OutputStream os, String publicKey) throws EncryptionFailureException {
+        PGPPublicKeyRing publicKeys1 = new PGPPublicKeyRing()
         EncryptionStream encryptionStream = PGPainless.encryptAndOrSign()
                 .onOutputStream(os)
                 .withOptions(
                         ProducerOptions.signAndEncrypt(
                                 new EncryptionOptions()
-                                        .addRecipient(),
-                                new SigningOptions()
-                                        // Sign in-line (using one-pass-signature packet)
-                                        .addInlineSignature(secretKeyDecryptor, aliceSecKey, signatureType)
-                                        // Sign using a detached signature
-                                        .addDetachedSignature(secretKeyDecryptor, aliceSecKey, signatureType)
-                                        // optionally override hash algorithm
-                                        .overrideHashAlgorithm(HashAlgorithm.SHA256)
+                                        .addRecipient(publicKey)
                         ).setAsciiArmor(true) // Ascii armor or not
                 );
     }
@@ -46,19 +42,21 @@ public class PainlessCryptProvider extends CryptProvider {
     public void setup(String s, File dir) throws Exception {
         File privateKeyFile = new File(dir, "privatekey.txt");
         if (privateKeyFile.exists()) {
-            secretKeys = PGPainless.readKeyRing().secretKeyRing(privateKeyFile.toURL().openStream());
+            secretKey = PGPainless.readKeyRing().secretKeyRing(privateKeyFile.toURL().openStream());
         } else {
-            secretKeys = PGPainless.generateKeyRing()
-                    .modernKeyRing("IPX <ipx@droppinganvil.dev>", s);
+            secretKey = PGPainless.generateKeyRing()
+                    .modernKeyRing("ControlX <contact@anvildevelopment.us>", s);
             FileOutputStream fos = new FileOutputStream(privateKeyFile);
-            secretKeys.encode(fos);
+            secretKey.encode(fos);
         }
-        File publicKeyFile = new File(dir, "publickey.txt");
+        File publicKeyFile = new File(dir, "publickeys.txt");
         if (publicKeyFile.exists()) {
-            publicKeys = PGPainless.readKeyRing().publicKeyRing(publicKeyFile.toURL().openStream());
+            publicKeys = PGPainless.readKeyRing().publicKeyRingCollection(publicKeyFile.toURL().openStream());
         } else {
-//
+            List<PGPPublicKeyRing> empty = new ArrayList<>();
+            publicKeys = new PGPPublicKeyRingCollection(empty);
         }
+
 
         //load keys
         ready = true;

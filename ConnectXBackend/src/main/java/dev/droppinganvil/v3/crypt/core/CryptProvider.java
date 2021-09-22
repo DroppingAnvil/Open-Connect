@@ -36,9 +36,6 @@ public abstract class CryptProvider {
             FileInputStream input = new FileInputStream(in);
             FileOutputStream encryptedOutput = new FileOutputStream(destination);
             encrypt(input, encryptedOutput, publicKey);
-            input.close();
-            encryptedOutput.flush();
-            encryptedOutput.close();
             if (!in.delete()) throw new IOException();
     }
     public void decryptFile(File in, File outDir) throws IOException, DecryptionFailureException {
@@ -51,9 +48,6 @@ public abstract class CryptProvider {
         FileInputStream input = new FileInputStream(in);
         FileOutputStream decryptedOutput = new FileOutputStream(destination);
         decrypt(input, decryptedOutput);
-        input.close();
-        decryptedOutput.flush();
-        decryptedOutput.close();
     }
     public void decrypt(InputStream is, OutputStream os) throws DecryptionFailureException {
 
@@ -79,6 +73,9 @@ public abstract class CryptProvider {
         tempdir = dir;
     }
     public void setup(String s, File dir) throws Exception {
+
+    }
+    public void shutdown() {
 
     }
 

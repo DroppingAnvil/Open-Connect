@@ -8,14 +8,13 @@ package dev.droppinganvil.v3;
 import com.squareup.moshi.JsonAdapter;
 import dev.droppinganvil.v3.control.Platform;
 import dev.droppinganvil.v3.keychange.ServerKey;
-import dev.droppinganvil.v3.keychange.LoginServer;
 import me.droppinganvil.core.mysql.MySQL;
 import okhttp3.Request;
+import okhttp3.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
@@ -23,7 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ConnectXAPI {
     public static MySQL productServer = new MySQL(Configuration.STORAGE_PAYMENT_USERNAME,Configuration.STORAGE_PAYMENT_PASS,"products",Configuration.STORAGE_PAYMENT_URL, Configuration.STORAGE_PAYMENT_SCHEMA);
     public static ConnectXAPI instance;
-    public static Map<String, Stringpeers = new ArrayList<>();
+    public static peers = new ArrayList<>();
     public static ServerKey serverKey;
     private static String serverID;
     public static JsonAdapter<ServerKey> serverKeyJsonAdapter = Updater.moshi.adapter(ServerKey.class).lenient();
@@ -35,7 +34,6 @@ public class ConnectXAPI {
         serverKey = new ServerKey();
         serverKey.primaryKey = Configuration.INTERNAL_SERVERKEY1;
         serverKey.secondaryKey = Configuration.INTERNAL_SERVERKEY2;
-        LoginServer.login(serverKey);
         serverID = Configuration.serverID;
         instance = this;
         String osS = System.getProperty("os.name");
@@ -95,6 +93,17 @@ public class ConnectXAPI {
             if (cxa == null) return false;
             return cxa.disabled || cxa.key.equals(auth);
         }
+    }
+
+    public void login() throws IOException {
+        Response response =
+                Updater.client.newCall(new Request.Builder()
+                        .url(Configuration.INTERNAL_CENTRAL_URL + "slogin")
+                        .addHeader("Authorization", serverKey.primaryKey+":"+serverKey.secondaryKey)
+                        .build()
+                ).execute();
+        ServerKey skr = serverKeyJsonAdapter.fromJson(response.body().string());
+        serverKey = skr;
     }
 
     public static class Clients {

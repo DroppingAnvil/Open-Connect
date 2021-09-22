@@ -6,6 +6,7 @@ import java.io.OutputStream;
 public class IOJob {
     public InputStream is;
     public OutputStream os;
+    public Boolean closeAfter;
     public JobType jt;
     /**
      * Represents the success of the individual IO operation this job should undertake, will not become true on root object until all jobs and doAfter s have completed
@@ -17,15 +18,17 @@ public class IOJob {
      */
     public IOJob next;
 
-    public IOJob(InputStream is, OutputStream os) {
+    public IOJob(InputStream is, OutputStream os, Boolean closeAfter) {
         this.is = is;
         this.os = os;
         this.jt = JobType.WRITE;
+        this.closeAfter = closeAfter;
     }
 
-    public IOJob(InputStream is) {
+    public IOJob(InputStream is, Boolean closeAfter) {
         this.is = is;
         this.jt = JobType.REVERSE;
+        this.closeAfter = closeAfter;
     }
 
     /**
