@@ -5,11 +5,15 @@ import java.util.List;
 
 public class Node implements Serializable {
     /**
-     * Known URLs for initial handshake with a Boolean defining active state
+     * Known URLs for initial handshake
      */
     public List<NodeURL> webURLs;
     /**
-     * Primary Identification
+     * Public Key
      */
     public String primaryKey;
+    /**
+     * Public Key
+     */
+    public String name;
 }

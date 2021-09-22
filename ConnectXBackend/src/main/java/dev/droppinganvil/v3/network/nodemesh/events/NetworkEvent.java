@@ -17,5 +17,5 @@ public class NetworkEvent extends NetworkContainer implements Serializable {
     /**
      * Event specific data
      */
-    public String data;
+    public Object data;
 }
