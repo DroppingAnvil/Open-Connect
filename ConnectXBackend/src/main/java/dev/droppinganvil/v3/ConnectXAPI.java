@@ -15,18 +15,13 @@ import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ConnectXAPI {
-    public static MySQL productServer = new MySQL(Configuration.STORAGE_PAYMENT_USERNAME,Configuration.STORAGE_PAYMENT_PASS,"products",Configuration.STORAGE_PAYMENT_URL, Configuration.STORAGE_PAYMENT_SCHEMA);
     public static ConnectXAPI instance;
-    public static JoinKey serverKey;
     public static ConcurrentHashMap<String, ConnectXAccount> clientCache = new ConcurrentHashMap<>();
     public static Platform platform;
     final static Logger logger = LoggerFactory.getLogger(ConnectXAPI.class);
 
     public ConnectXAPI() throws IOException {
-        serverKey = new JoinKey();
-        serverKey.primaryKey = Configuration.INTERNAL_SERVERKEY1;
-        serverKey.secondaryKey = Configuration.INTERNAL_SERVERKEY2;
-        serverID = Configuration.serverID;
+
         instance = this;
         String osS = System.getProperty("os.name");
         osS = osS.toLowerCase(Locale.ROOT);

@@ -1,7 +1,5 @@
 package dev.droppinganvil.v3.network.nodemesh.events;
 
-import java.net.Socket;
-
 public enum EventType {
     /**
      * Resource common to all nodes has been updated
@@ -19,5 +17,13 @@ public enum EventType {
      * Device sends decrypted data to result in verification success
      */
     DEVICE_VERIFIED,
+    /**
+     * Device account is created
+     */
+    ACCOUNT_CREATED,
+    /**
+     *
+     */
+
     ;
 }

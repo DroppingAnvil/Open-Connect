@@ -9,5 +9,6 @@ public enum Role {
     CLOUD_PAYMENT,
     CLOUD_RESOURCE,
     CLOUD_REPLICATE,
+    GATEWAY,
     OTHER,
 }

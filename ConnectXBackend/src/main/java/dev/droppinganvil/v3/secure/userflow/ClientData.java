@@ -8,7 +8,6 @@ package dev.droppinganvil.v3.secure.userflow;
 import dev.droppinganvil.v3.Configuration;
 import dev.droppinganvil.v3.ConnectXAccount;
 import me.droppinganvil.core.exceptions.TypeNotSetException;
-import me.droppinganvil.core.mysql.MySQL;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -20,7 +19,6 @@ public class ClientData {
 
     public static ConnectXAccount getClient(String id, Boolean mustBeLoggedOn) throws IOException, InstantiationException, TypeNotSetException, IllegalAccessException {
         if (clientCache.containsKey(id)) return clientCache.get(id);
-        if (noauthclientCache.containsKey(id)) return noauthclientCache.get(id);
         if (mustBeLoggedOn) throw new IllegalAccessException();
         ConnectXAccount controlClient;
         if (id.contains("@")) {

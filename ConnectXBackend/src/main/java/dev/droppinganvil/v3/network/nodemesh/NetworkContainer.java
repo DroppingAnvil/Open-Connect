@@ -17,4 +17,5 @@ public class NetworkContainer implements Serializable {
     private String generateFingerprint(String s) {
         return Configuration.serverID + " | " + s + s==null?"":" | "+"Formatted Time";
     }
+
 }
