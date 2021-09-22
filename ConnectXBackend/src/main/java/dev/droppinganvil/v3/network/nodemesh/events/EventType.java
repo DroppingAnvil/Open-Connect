@@ -6,6 +6,6 @@ public enum EventType {
     GLOBAL_RESOURCE_UPDATE(Socket.class),
     ;
 
-    EventType(Class<?> socketClass) {
+    EventType(Class<?> clazz) {
     }
 }

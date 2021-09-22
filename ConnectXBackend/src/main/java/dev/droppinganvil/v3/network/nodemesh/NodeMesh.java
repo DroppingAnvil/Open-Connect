@@ -11,7 +11,9 @@ public class NodeMesh {
         synchronized (eventQueue) {
             NetworkEvent ne = eventQueue.poll();
             if (ne!=null) {
+                switch (ne.eventType) {
 
+                }
             }
         }
     }

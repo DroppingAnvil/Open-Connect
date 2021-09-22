@@ -9,8 +9,6 @@ import com.squareup.moshi.JsonAdapter;
 import dev.droppinganvil.v3.control.Platform;
 import dev.droppinganvil.v3.keychange.ServerKey;
 import me.droppinganvil.core.mysql.MySQL;
-import okhttp3.Request;
-import okhttp3.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ConnectXAPI {
     public static MySQL productServer = new MySQL(Configuration.STORAGE_PAYMENT_USERNAME,Configuration.STORAGE_PAYMENT_PASS,"products",Configuration.STORAGE_PAYMENT_URL, Configuration.STORAGE_PAYMENT_SCHEMA);
     public static ConnectXAPI instance;
-    public static peers = new ArrayList<>();
+
     public static ServerKey serverKey;
     private static String serverID;
     public static JsonAdapter<ServerKey> serverKeyJsonAdapter = Updater.moshi.adapter(ServerKey.class).lenient();
@@ -70,20 +68,6 @@ public class ConnectXAPI {
         return false;
     }
 
-    public List<ConnectXAccount> getUpdates() {
-        System.out.println("Making request to central server to retrieve updates");
-        try {
-            Clients clients = Updater.clientsJsonAdapter.fromJson(Updater.client.newCall(new Request.Builder().url(Configuration.INTERNAL_CENTRAL_URL + "updates")
-                    .addHeader("server", serverKey.tempKey)
-                    .build()).execute().body().string());
-            System.out.println("Response received for ");
-            return clients.clients;
-        } catch (IOException e) {
-            System.out.print(e);
-            return null;
-        }
-    }
-
     public Boolean authenticate(String id, String auth) {
         if (clientCache.containsKey(id)) {
             return clientCache.get(id).id.equals(auth);
@@ -96,14 +80,7 @@ public class ConnectXAPI {
     }
 
     public void login() throws IOException {
-        Response response =
-                Updater.client.newCall(new Request.Builder()
-                        .url(Configuration.INTERNAL_CENTRAL_URL + "slogin")
-                        .addHeader("Authorization", serverKey.primaryKey+":"+serverKey.secondaryKey)
-                        .build()
-                ).execute();
-        ServerKey skr = serverKeyJsonAdapter.fromJson(response.body().string());
-        serverKey = skr;
+
     }
 
     public static class Clients {
