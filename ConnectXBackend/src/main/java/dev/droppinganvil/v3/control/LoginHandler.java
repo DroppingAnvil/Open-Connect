@@ -8,6 +8,7 @@ package dev.droppinganvil.v3.control;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import dev.droppinganvil.v3.Adapters;
+import dev.droppinganvil.v3.secure.userflow.ClientData;
 import dev.droppinganvil.v3.ConnectXAccount;
 import dev.droppinganvil.v3.LoginForm;
 

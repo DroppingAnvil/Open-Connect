@@ -5,9 +5,7 @@
 
 package dev.droppinganvil.v3;
 
-import com.squareup.moshi.JsonAdapter;
 import dev.droppinganvil.v3.control.Platform;
-import dev.droppinganvil.v3.keychange.ServerKey;
 import me.droppinganvil.core.mysql.MySQL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,16 +18,13 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ConnectXAPI {
     public static MySQL productServer = new MySQL(Configuration.STORAGE_PAYMENT_USERNAME,Configuration.STORAGE_PAYMENT_PASS,"products",Configuration.STORAGE_PAYMENT_URL, Configuration.STORAGE_PAYMENT_SCHEMA);
     public static ConnectXAPI instance;
-
-    public static ServerKey serverKey;
-    private static String serverID;
-    public static JsonAdapter<ServerKey> serverKeyJsonAdapter = Updater.moshi.adapter(ServerKey.class).lenient();
+    public static JoinKey serverKey;
     public static ConcurrentHashMap<String, ConnectXAccount> clientCache = new ConcurrentHashMap<>();
     public static Platform platform;
     final static Logger logger = LoggerFactory.getLogger(ConnectXAPI.class);
 
     public ConnectXAPI() throws IOException {
-        serverKey = new ServerKey();
+        serverKey = new JoinKey();
         serverKey.primaryKey = Configuration.INTERNAL_SERVERKEY1;
         serverKey.secondaryKey = Configuration.INTERNAL_SERVERKEY2;
         serverID = Configuration.serverID;

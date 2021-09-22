@@ -1,5 +1,7 @@
 package dev.droppinganvil.v3.network.nodemesh;
 
+import me.droppinganvil.core.mysql.annotations.MemoryOnly;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -11,9 +13,18 @@ public class Node implements Serializable {
     /**
      * Public Key
      */
-    public String primaryKey;
+    public String publicKey;
     /**
-     * Public Key
+     * Only present when initializing device
+     */
+    @MemoryOnly
+    public String privateKey;
+    /**
+     * Device ID
+     */
+    public String deviceID;
+    /**
+     * Friendly name
      */
     public String name;
 }
