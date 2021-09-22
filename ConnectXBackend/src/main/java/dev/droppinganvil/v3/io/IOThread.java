@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class IOThread implements Runnable {
     public static boolean run = false;
-    public static Queue<IOJob> jobQueue = new ConcurrentLinkedQueue<>();
+    public static final Queue<IOJob> jobQueue = new ConcurrentLinkedQueue<>();
     public Long sleep;
     public BaseStatus status;
 

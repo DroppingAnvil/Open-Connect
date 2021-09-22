@@ -17,9 +17,9 @@ import java.io.*;
 public class RemoteDirectory {
     public static OkHttpClient httpClient = new OkHttpClient();
     /**
-     * RemoteDirectory URLs should be formatted serverid.domain.xyz/rdir?id=containerID?file=
-     * RemoteDirectory URLs, when using depth, should look similar to serverID.domain.xyz/rdir?id=containerID?file=dir1/dir2/
-     * If used with the IPX system user base containers are the user's id
+     * RemoteDirectory URLs should be formatted ip/rdir?id=containerID?file=
+     * RemoteDirectory URLs, when using depth, should look similar to ip/rdir?id=containerID?file=dir1/dir2/
+     * If used with the ConnectX system user base containers are the user's id
      */
     public String url;
     public boolean readOnly;
@@ -32,18 +32,19 @@ public class RemoteDirectory {
      */
     public String machinePath;
     /**
-     * Permission container for root directory
-     * TODO More permission depth
+     * Permission container for directory
      */
     public BasicPermissionContainer directoryPermissions;
     public Boolean useDepthIfAvailable = false;
-
     private String auth;
-    public RemoteDirectory(String serverID, String domain, String containerID, String directoryPath, String auth) {
+
+    public RemoteDirectory(String address, String directoryPath, String auth) {
         this.auth = auth;
-        this.serverID = serverID;
         machinePath = directoryPath;
-        this.url = serverID + "." + domain + "/rdir?id="+containerID+"?file="+machinePath;
+        this.url = address;
+        if (isLocal()) {
+
+        }
     }
 
     public void copyFile(String path, OutputStream os, Boolean sync) throws IOException {
@@ -52,16 +53,18 @@ public class RemoteDirectory {
         if (isLocal()) {
             is = new FileInputStream(path);
         } else {
-            Response r = httpClient.newCall(new Request.Builder().url(url + path).build()).execute();
+            Response r = httpClient.newCall(new Request.Builder().url( + path).build()).execute();
             ResponseBody rb = r.body();
             if (rb == null) throw new FileNotFoundException();
             is = rb.byteStream();
         }
-        IOJob ioJob = new IOJob(is, os);
+        IOJob ioJob = new IOJob(is, os, true);
         if (sync) {
             IOThread.processJob(ioJob, true);
         } else {
-            IOThread.jobQueue.add(ioJob);
+            synchronized (IOThread.jobQueue) {
+                IOThread.jobQueue.add(ioJob);
+            }
         }
     }
 
