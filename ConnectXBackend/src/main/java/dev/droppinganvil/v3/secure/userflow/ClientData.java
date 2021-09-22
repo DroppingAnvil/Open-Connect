@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Twisted Palms Incorporated
+ * Copyright (c) 2021 Christopher Willett
  * All Rights Reserved.
  */
 
@@ -16,9 +16,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ClientData {
-    public static final MySQL clientServer = new MySQL(Configuration.STORAGE_USER_USERNAME, Configuration.STORAGE_USER_PASS, "Users", Configuration.STORAGE_USER_URL, ConnectXAccount.class, Configuration.STORAGE_USER_SCHEMA);
     public static ConcurrentHashMap<String, ConnectXAccount> clientCache = new ConcurrentHashMap<>();
-    public static ConcurrentHashMap<String, ConnectXAccount> noauthclientCache = new ConcurrentHashMap<>();
 
     public static ConnectXAccount getClient(String id, Boolean mustBeLoggedOn) throws IOException, InstantiationException, TypeNotSetException, IllegalAccessException {
         if (clientCache.containsKey(id)) return clientCache.get(id);

@@ -1,4 +1,4 @@
-package dev.droppinganvil.v3.control;
+package dev.droppinganvil.v3;
 
 public enum Platform {
     WINDOWS,

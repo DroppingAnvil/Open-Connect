@@ -10,7 +10,6 @@ import com.squareup.moshi.Moshi;
 import dev.droppinganvil.v3.ProcessX.envconfs.EnvConf;
 import dev.droppinganvil.v3.ProcessX.panel.Process;
 import dev.droppinganvil.v3.ProcessX.panel.*;
-import dev.droppinganvil.v3.secure.userflow.EditUserRequest;
 
 public class Adapters {
     public static Moshi moshi;

@@ -5,7 +5,6 @@
 
 package dev.droppinganvil.v3;
 
-import dev.droppinganvil.v3.control.Platform;
 import me.droppinganvil.core.mysql.MySQL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

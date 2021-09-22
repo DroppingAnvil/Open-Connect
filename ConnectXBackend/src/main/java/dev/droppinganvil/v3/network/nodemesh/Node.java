@@ -27,4 +27,12 @@ public class Node implements Serializable {
      * Friendly name
      */
     public String name;
+    /**
+     * Total storage volume available
+     */
+    public Long capacity;
+    /**
+     * Total storage volume
+     */
+    public Long maxCapacity;
 }

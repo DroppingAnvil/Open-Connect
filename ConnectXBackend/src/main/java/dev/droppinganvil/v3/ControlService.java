@@ -5,20 +5,10 @@
 
 package dev.droppinganvil.v3;
 
-import com.sun.net.httpserver.HttpsConfigurator;
-import com.sun.net.httpserver.HttpsParameters;
 import com.sun.net.httpserver.HttpsServer;
 import dev.droppinganvil.v3.analytics.AnalyticData;
 import dev.droppinganvil.v3.analytics.Analytics;
 import dev.droppinganvil.v3.secure.userflow.ClientData;
-import dev.droppinganvil.v3.secure.userflow.CreateAccountHandler;
-import dev.droppinganvil.v3.control.LoginHandler;
-import dev.droppinganvil.v3.paypal.requests.WebhookHandler;
-
-import javax.net.ssl.*;
-import java.io.FileInputStream;
-import java.net.InetSocketAddress;
-import java.security.KeyStore;
 import java.util.HashSet;
 
 import static dev.droppinganvil.v3.ConnectXAPI.logger;
@@ -31,35 +21,6 @@ public class ControlService {
     public static void main(String[] args) throws Exception {
         try {
             logger.info("Starting ConnectX instance");
-            InetSocketAddress address = new InetSocketAddress("", 443);
-            logger.debug("Node address obtained");
-            HttpsServer httpsServer = HttpsServer.create(address, 0);
-            logger.debug("Created HTTPS Server");
-            logger.info("Setting up HTTPS");
-            SSLContext sslContext = SSLContext.getInstance("TLS");
-            KeyStore ks = KeyStore.getInstance(Configuration.WEBSERVER_SSL_KEYSTORE);
-            FileInputStream fis = new FileInputStream(Configuration.WEBSERVER_SSL_CERTNAME);
-            ks.load(fis, Configuration.WEBSERVER_SSL_PASS.toCharArray());
-            KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
-            kmf.init(ks, Configuration.WEBSERVER_SSL_PASS.toCharArray());
-            TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509");
-            tmf.init(ks);
-            sslContext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
-            httpsServer.setHttpsConfigurator(new HttpsConfigurator(sslContext) {
-                public void configure(HttpsParameters params) {
-                    try {
-                        SSLContext context = getSSLContext();
-                        SSLEngine engine = context.createSSLEngine();
-                        params.setNeedClientAuth(false);
-                        params.setCipherSuites(engine.getEnabledCipherSuites());
-                        params.setProtocols(engine.getEnabledProtocols());
-                        SSLParameters sslParameters = context.getSupportedSSLParameters();
-                        params.setSSLParameters(sslParameters);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-            });
             try {
                 apiI = new ConnectXAPI();
                 //todo remove dev access
@@ -72,20 +33,9 @@ public class ControlService {
                 admin.disabled = false;
                 ClientData.clientCache.put("DroppingAnvil", admin);
                 //todo optimize order for stability
-                httpsServer.createContext("/api/v3/login", new LoginHandler());
-                httpsServer.createContext("/api/v3/createaccount", new CreateAccountHandler());
-                httpsServer.createContext("/api/v3/clients", )
                 //Get PayPal token
                 //TODO Setup products
-            } catch (Exception e) {
-                logger.error("");
-                Analytics.addData(AnalyticData.Critical_Error, e);
-            }
-
-            httpsServer.createContext("/payments", new WebhookHandler());
-            httpsServer.setExecutor(null); // creates a default executor
-            httpsServer.start();
-            server = httpsServer;
+            //TODO httpsServer.createContext("/payments", new WebhookHandler());
         } catch (Exception exception) {
             Analytics.addData(AnalyticData.Internal_Error, exception);
             exception.printStackTrace();
