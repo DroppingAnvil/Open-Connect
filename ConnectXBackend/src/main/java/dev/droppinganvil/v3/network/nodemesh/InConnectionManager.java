@@ -7,11 +7,22 @@ package dev.droppinganvil.v3.network.nodemesh;
 
 import dev.droppinganvil.v3.network.nodemesh.events.NetworkEvent;
 
+import java.io.IOException;
+import java.net.ServerSocket;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ThreadPoolExecutor;
 
 public class InConnectionManager {
+    //TODO ServerSocket collection
+
+    public ServerSocket serverSocket;
     public static final Queue<NetworkEvent> eventQueue = new ConcurrentLinkedQueue<>();
+
+    public InConnectionManager(Integer i) throws IOException {
+        serverSocket = new ServerSocket(i);
+    }
+
     public static void processEvent() {
         synchronized (eventQueue) {
             NetworkEvent ne = eventQueue.poll();

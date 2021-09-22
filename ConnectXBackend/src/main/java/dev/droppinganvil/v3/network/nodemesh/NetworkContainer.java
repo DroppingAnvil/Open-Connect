@@ -6,6 +6,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This data should not be E2E it must be P2P to work effectively
+ */
 public class NetworkContainer implements Serializable {
     public List<String> fingerprints = new ArrayList<>();
     public void fingerprint() {

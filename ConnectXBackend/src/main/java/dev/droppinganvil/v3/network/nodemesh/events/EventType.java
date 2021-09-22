@@ -22,8 +22,8 @@ public enum EventType {
      */
     ACCOUNT_CREATED,
     /**
-     *
+     * Device account has been updated
      */
-
+    ACCOUNT_UPDATE
     ;
 }
