@@ -23,10 +23,10 @@ public abstract class CryptProvider {
     public String getPublicKey() {
         return null;
     }
-    public void encrypt(InputStream is, OutputStream os, String publicKey) throws EncryptionFailureException {
+    public void encrypt(InputStream is, OutputStream os, Long publicKey) throws EncryptionFailureException {
 
     }
-    public void encryptFile(File in, File outDir, String publicKey) throws IOException, EncryptionFailureException {
+    public void encryptCopyAndDeleteFile(File in, File outDir, Long publicKey) throws IOException, EncryptionFailureException {
         if (!in.exists() || IPXFileUtils.checkBasicIORights(in)) throw new IOException();
             String name = in.getName();
             File destination = new File(outDir, name);
@@ -38,7 +38,7 @@ public abstract class CryptProvider {
             encrypt(input, encryptedOutput, publicKey);
             if (!in.delete()) throw new IOException();
     }
-    public void decryptFile(File in, File outDir) throws IOException, DecryptionFailureException {
+    public void decryptAndCopyFile(File in, File outDir) throws IOException, DecryptionFailureException {
         if (!in.exists() || IPXFileUtils.checkBasicIORights(in)) throw new IOException();
         String name = in.getName();
         File destination = new File(outDir, name);
