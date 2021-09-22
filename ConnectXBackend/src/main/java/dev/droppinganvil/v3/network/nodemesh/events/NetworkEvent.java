@@ -15,7 +15,11 @@ public class NetworkEvent extends NetworkContainer implements Serializable {
      */
     public String target;
     /**
-     * Event specific data
+     * Event specific ASCII armored data
      */
-    public Object data;
+    public String data;
+    /**
+     * Only present once set by receiver
+     */
+    public String receiveAddress;
 }

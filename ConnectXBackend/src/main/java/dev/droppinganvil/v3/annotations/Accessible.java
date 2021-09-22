@@ -15,5 +15,5 @@ import java.lang.annotation.Target;
 /**
  * Used when allowing modification of a variable through network
  */
-public @interface Writable {
+public @interface Accessible {
 }
