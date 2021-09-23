@@ -8,30 +8,12 @@ package dev.droppinganvil.v3;
 import java.io.Serializable;
 
 public class Configuration implements Serializable {
-
-    //IPX
     public static String SDF_FORMAT = "S-m-H-a-EEE-F-M-y";
-    public static String domain = "anvildevelopment.us";
-    public static String serverID = "na1";
+    public static String netID = "NETWORK";
+    public static Boolean active = true;
     public static final Integer rateLimit = 15;
     public static final Integer rateLimitSleep = 1000;
-    public static String STORAGE_USER_URL = "mysqlx://localhost:33060";
-    public static String STORAGE_USER_SCHEMA = "hosting";
-    public static String STORAGE_USER_USERNAME = "Control";
-    public static String STORAGE_USER_PASS = "faeb178f-1f6b-4975-99d8-302b2f0bd370";
-    public static String STORAGE_PAYMENT_URL = "mysqlx://localhost:33060";
-    public static String STORAGE_PAYMENT_SCHEMA = "hosting";
-    public static String STORAGE_PAYMENT_USERNAME = "Control";
-    public static String STORAGE_PAYMENT_PASS = "faeb178f-1f6b-4975-99d8-302b2f0bd370";
-    //CRYPT
-    public static String CRYPT_BASE_PASS = "faeb178f-1f6b-4975-99d8-302b2f0bd370";
-    public static String CRYPT_CONNECT_URL = "https://na1.droppinganvil.dev/publickey.txt";
-    /**
-     * No spaces
-     */
-    public static String CRYPT_CONNECT_ORG = "DroppingAnvilDevelopment";
-
-    //RemoteDirectory
+    //
     public static Long IO_THREAD_SLEEP = 100L;
     public static Integer IO_WRITE_BYTE_BUFFER = 1024;
     public static Integer IO_REVERSE_BYTE_BUFFER = 1024;

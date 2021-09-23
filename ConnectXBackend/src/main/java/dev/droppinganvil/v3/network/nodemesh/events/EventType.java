@@ -24,6 +24,10 @@ public enum EventType {
     /**
      * Device account has been updated
      */
-    ACCOUNT_UPDATE
+    ACCOUNT_UPDATE,
+    /**
+     * "Temporary" Network shutdown (Can only be sent from NMI)
+     */
+    SIGTERM,
     ;
 }

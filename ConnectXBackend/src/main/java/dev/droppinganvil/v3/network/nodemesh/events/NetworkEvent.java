@@ -11,9 +11,9 @@ public class NetworkEvent extends NetworkContainer implements Serializable {
      */
     public String initiator;
     /**
-     * Nodes that should process event
+     * Nodes that should process event. "NETWORK" targets all nodes and is much more efficient
      */
-    public String target;
+    public String target = "NETWORK";
     /**
      * Event specific ASCII armored data
      */
