@@ -19,7 +19,7 @@ public class NetworkEvent extends NetworkContainer implements Serializable {
      */
     public String data;
     /**
-     * Only present once set by receiver
+     * Only present once set by receiving socket
      */
     public String receiveAddress;
 }
