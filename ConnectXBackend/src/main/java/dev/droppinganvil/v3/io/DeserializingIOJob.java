@@ -26,7 +26,7 @@ public class DeserializingIOJob extends IOJob {
     public DeserializingIOJob(InputStream is, OutputStream os, Boolean closeAfter) {
         super(is, os, closeAfter);
     }
-    //TODO look into using managed persistence
+    //TODO look into using the old proprietary managed persistence
     @Override
     public void doAfter(boolean success) {
         try {

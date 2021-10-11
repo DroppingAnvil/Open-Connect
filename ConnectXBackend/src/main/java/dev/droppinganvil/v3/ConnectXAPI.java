@@ -5,7 +5,8 @@
 
 package dev.droppinganvil.v3;
 
-import me.droppinganvil.core.mysql.MySQL;
+import dev.droppinganvil.v3.edge.ConnectXContainer;
+import dev.droppinganvil.v3.edge.Product;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,7 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class ConnectXAPI {
     public static ConnectXAPI instance;
-    public static ConcurrentHashMap<String, ConnectXAccount> clientCache = new ConcurrentHashMap<>();
+    public static ConcurrentHashMap<String, ConnectXContainer> clientCache = new ConcurrentHashMap<>();
     public static Platform platform;
     final static Logger logger = LoggerFactory.getLogger(ConnectXAPI.class);
 
@@ -35,22 +36,22 @@ public class ConnectXAPI {
 
     }
     @Deprecated
-    public static ConnectXAccount getClient(String id) {
+    public static ConnectXContainer getClient(String id) {
         if (clientCache.containsKey(id)) return clientCache.get(id);
-        ConnectXAccount client = ConnectXAccount.requestData(id, serverKey.tempKey);
+        ConnectXContainer client = ConnectXContainer.requestData(id, serverKey.tempKey);
         clientCache.put(id, client);
         return client;
     }
 
-    public static ConnectXAccount getClient(String id, Boolean mustBeLoggedOn) throws IllegalAccessException {
+    public static ConnectXContainer getClient(String id, Boolean mustBeLoggedOn) throws IllegalAccessException {
         if (clientCache.containsKey(id)) return clientCache.get(id);
         if (mustBeLoggedOn) throw new IllegalAccessException();
-        ConnectXAccount client = ConnectXAccount.requestData(id, serverKey.tempKey);
+        ConnectXContainer client = ConnectXContainer.requestData(id, serverKey.tempKey);
         clientCache.put(id, client);
         return client;
     }
 
-    public static Boolean isSubscriptionValid(ConnectXAccount client, Product product) {
+    public static Boolean isSubscriptionValid(ConnectXContainer client, Product product) {
         if (client.subscriptions.containsKey(product)) {
             return client.subscriptions.get(product) > System.currentTimeMillis();
         }
@@ -62,7 +63,7 @@ public class ConnectXAPI {
             return clientCache.get(id).id.equals(auth);
         } else {
             //TODO load balancer
-            ConnectXAccount cxa = ConnectXAccount.requestData(id, serverKey.tempKey);
+            ConnectXContainer cxa = ConnectXContainer.requestData(id, serverKey.tempKey);
             if (cxa == null) return false;
             return cxa.disabled || cxa.key.equals(auth);
         }
@@ -73,6 +74,6 @@ public class ConnectXAPI {
     }
 
     public static class Clients {
-        List<ConnectXAccount> clients;
+        List<ConnectXContainer> clients;
     }
 }

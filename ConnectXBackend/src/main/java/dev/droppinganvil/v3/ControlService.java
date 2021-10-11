@@ -8,7 +8,9 @@ package dev.droppinganvil.v3;
 import com.sun.net.httpserver.HttpsServer;
 import dev.droppinganvil.v3.analytics.AnalyticData;
 import dev.droppinganvil.v3.analytics.Analytics;
-import dev.droppinganvil.v3.secure.userflow.ClientData;
+import dev.droppinganvil.v3.edge.ClientData;
+import dev.droppinganvil.v3.edge.ConnectXContainer;
+
 import java.util.HashSet;
 
 import static dev.droppinganvil.v3.ConnectXAPI.logger;
@@ -24,7 +26,7 @@ public class ControlService {
             try {
                 apiI = new ConnectXAPI();
                 //todo remove dev access
-                ConnectXAccount admin = new ConnectXAccount();
+                ConnectXContainer admin = new ConnectXContainer();
                 admin.name = "Dropping Anvil";
                 admin.id = "DroppingAnvil";
                 admin.authorization = "root";
