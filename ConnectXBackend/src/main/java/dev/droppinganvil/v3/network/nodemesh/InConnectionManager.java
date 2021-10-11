@@ -14,9 +14,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 
 public class InConnectionManager {
-    //TODO ServerSocket collection
-
-    public ServerSocket serverSocket;
+    public static ServerSocket serverSocket;
     public static final Queue<NetworkEvent> eventQueue = new ConcurrentLinkedQueue<>();
 
     public InConnectionManager(Integer i) throws IOException {

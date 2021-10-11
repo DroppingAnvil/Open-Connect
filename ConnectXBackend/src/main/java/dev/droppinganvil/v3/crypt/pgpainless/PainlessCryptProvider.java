@@ -4,8 +4,12 @@ import dev.droppinganvil.v3.crypt.core.CryptProvider;
 import dev.droppinganvil.v3.crypt.core.exceptions.DecryptionFailureException;
 import dev.droppinganvil.v3.crypt.core.exceptions.EncryptionFailureException;
 import org.bouncycastle.openpgp.*;
+import org.bouncycastle.util.io.Streams;
 import org.pgpainless.PGPainless;
 import org.pgpainless.algorithm.DocumentSignatureType;
+import org.pgpainless.decryption_verification.ConsumerOptions;
+import org.pgpainless.decryption_verification.DecryptionStream;
+import org.pgpainless.decryption_verification.OpenPgpMetadata;
 import org.pgpainless.encryption_signing.EncryptionOptions;
 import org.pgpainless.encryption_signing.EncryptionStream;
 import org.pgpainless.encryption_signing.ProducerOptions;
@@ -38,7 +42,7 @@ public class PainlessCryptProvider extends CryptProvider {
                                     .addRecipient(publicKey),
                             new SigningOptions()
                                     .addInlineSignature(protector, secretKey, DocumentSignatureType.CANONICAL_TEXT_DOCUMENT)
-                            ).setAsciiArmor(true)
+                            ).setAsciiArmor(false)
                     );
         } catch (Exception e) {
             EncryptionFailureException efe = new EncryptionFailureException();
@@ -47,8 +51,22 @@ public class PainlessCryptProvider extends CryptProvider {
         }
     }
     @Override
-    public void decrypt(InputStream is, OutputStream os) throws DecryptionFailureException {
-
+    public Object decrypt(InputStream is, OutputStream os) throws DecryptionFailureException {
+        try {
+            DecryptionStream decryptionStream = PGPainless.decryptAndOrVerify()
+                    .onInputStream(is)
+                    .withOptions(new ConsumerOptions()
+                            .addDecryptionKey(secretKey, protector)
+                    );
+            Streams.pipeAll(decryptionStream, os);
+            decryptionStream.close();
+            return decryptionStream.getResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+            DecryptionFailureException dfe = new DecryptionFailureException();
+            dfe.initCause(e);
+            throw dfe;
+        }
     }
     @Override
     public void setup(String s, File dir) throws Exception {
@@ -57,7 +75,7 @@ public class PainlessCryptProvider extends CryptProvider {
             secretKey = PGPainless.readKeyRing().secretKeyRing(privateKeyFile.toURL().openStream());
         } else {
             secretKey = PGPainless.generateKeyRing()
-                    .modernKeyRing("ControlX <contact@anvildevelopment.us>", s);
+                    .modernKeyRing("ConnectX <contact@anvildevelopment.us>", s);
             FileOutputStream fos = new FileOutputStream(privateKeyFile);
             secretKey.encode(fos);
         }

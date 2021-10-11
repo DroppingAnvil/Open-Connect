@@ -49,7 +49,7 @@ public abstract class CryptProvider {
         FileOutputStream decryptedOutput = new FileOutputStream(destination);
         decrypt(input, decryptedOutput);
     }
-    public void decrypt(InputStream is, OutputStream os) throws DecryptionFailureException {
+    public Object decrypt(InputStream is, OutputStream os) throws DecryptionFailureException {
 
     }
     private File createTemp(String s) {

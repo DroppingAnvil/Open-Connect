@@ -1,7 +1,11 @@
 package dev.droppinganvil.v3.io;
 
 import dev.droppinganvil.v3.Configuration;
+import dev.droppinganvil.v3.crypt.core.CryptServiceProvider;
+import dev.droppinganvil.v3.crypt.core.exceptions.DecryptionFailureException;
+import dev.droppinganvil.v3.network.nodemesh.NetworkContainer;
 import dev.droppinganvil.v3.utils.obj.BaseStatus;
+import org.pgpainless.decryption_verification.OpenPgpMetadata;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -70,6 +74,17 @@ public class IOThread implements Runnable {
             os.close();
         }
     }
+    public static void processNetworkContainer(InputStream is) throws IOException, DecryptionFailureException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        Object o = CryptServiceProvider.encryptionProvider.decrypt(is, baos);
+        if (o instanceof OpenPgpMetadata) {
+            OpenPgpMetadata opm = (OpenPgpMetadata) o;
+            //TODO
+        }
+
+        NetworkContainer nc = ()
+
+    }
     public static boolean processJob(IOJob ioJob, boolean root) throws IOException {
         try {
             switch (ioJob.jt) {
@@ -78,6 +93,9 @@ public class IOThread implements Runnable {
                     break;
                 case REVERSE:
                     ioJob.os = reverse(ioJob.is, ioJob.closeAfter);
+                    break;
+                case DECRYPT:
+
             }
             if (ioJob.next != null) {
                 processJob(ioJob.next, false);
