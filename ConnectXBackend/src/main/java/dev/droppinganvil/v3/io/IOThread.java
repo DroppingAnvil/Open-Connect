@@ -3,7 +3,10 @@ package dev.droppinganvil.v3.io;
 import dev.droppinganvil.v3.Configuration;
 import dev.droppinganvil.v3.crypt.core.CryptServiceProvider;
 import dev.droppinganvil.v3.crypt.core.exceptions.DecryptionFailureException;
-import dev.droppinganvil.v3.network.nodemesh.NetworkContainer;
+import dev.droppinganvil.v3.network.UnauthorizedNetworkConnectivityException;
+import dev.droppinganvil.v3.network.nodemesh.InConnectionManager;
+import dev.droppinganvil.v3.network.nodemesh.NodeMesh;
+import dev.droppinganvil.v3.network.nodemesh.events.NetworkEvent;
 import dev.droppinganvil.v3.utils.obj.BaseStatus;
 import org.pgpainless.decryption_verification.OpenPgpMetadata;
 
@@ -71,20 +74,24 @@ public class IOThread implements Runnable {
             os.close();
         }
     }
-    public static void processNetworkContainer(InputStream is) throws IOException, DecryptionFailureException, ClassNotFoundException {
+    public static void processNetworkInput(InputStream is, String inputAddress) throws IOException, DecryptionFailureException, ClassNotFoundException, UnauthorizedNetworkConnectivityException {
         PipedInputStream in = new PipedInputStream();
         PipedOutputStream out = new PipedOutputStream(in);
         //ByteArrayOutputStream baos = new ByteArrayOutputStream();
         Object o = CryptServiceProvider.encryptionProvider.decrypt(is, out);
         if (o instanceof OpenPgpMetadata) {
             OpenPgpMetadata opm = (OpenPgpMetadata) o;
-            //TODO
+            if (!opm.isVerified()) {
+                NodeMesh.in.blacklistedConnections.add(inputAddress);
+                throw new UnauthorizedNetworkConnectivityException();
+            }
         }
-            out.close();
+        out.close();
         //TODO max size
-        NetworkContainer nc = (NetworkContainer) new NetworkContainerObjectInputStream(in).readObject();
-
-
+        NetworkEvent ne = (NetworkEvent) new NetworkEventObjectInputStream(in).readObject();
+        synchronized (NodeMesh.in.eventQueue) {
+            NodeMesh.in.eventQueue.add(ne);
+        }
     }
     public static boolean processJob(IOJob ioJob, boolean root) throws IOException {
         try {

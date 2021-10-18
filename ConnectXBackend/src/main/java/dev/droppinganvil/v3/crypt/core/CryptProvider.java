@@ -50,7 +50,10 @@ public abstract class CryptProvider {
         decrypt(input, decryptedOutput);
     }
     public Object decrypt(InputStream is, OutputStream os) throws DecryptionFailureException {
-
+        return null;
+    }
+    public Boolean verify(String data, String networkDeviceID) throws DecryptionFailureException {
+        return false;
     }
     private File createTemp(String s) {
         return null;

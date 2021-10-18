@@ -1,19 +1,12 @@
 /*
- * Copyright (c) 2021 Twisted Palms Incorporated
+ * Copyright (c) 2021 Christopher Willett
  * All Rights Reserved.
  */
 
 package dev.droppinganvil.v3.analytics;
 
 public enum AnalyticData {
-    Failed_Payment,
-    Chargeback,
-    Successful_Payment,
     Internal_Error,
-    Account_Created,
-    Request,
-    Authorized,
-    Authorization_Fail,
-    Server_Key_Creation,
     Critical_Error,
+    Security_Event,
 }
