@@ -39,6 +39,10 @@ public class PainlessCryptProvider extends CryptProvider {
      * On board public key
      */
     private PGPPublicKeyRing publicKey;
+    /**
+     * NMI Public key
+     */
+    public PGPPublicKeyRing nmipubkey;
     private SecretKeyRingProtector protector = SecretKeyRingProtector.unprotectedKeys();
 
     @Override
@@ -97,6 +101,12 @@ public class PainlessCryptProvider extends CryptProvider {
         } else {
             List<PGPPublicKeyRing> empty = new ArrayList<>();
             publicKeys = new PGPPublicKeyRingCollection(empty);
+        }
+        File nmipublicKeyFile = new File(dir, "nmi.asc");
+        if (nmipublicKeyFile.exists()) {
+            nmipubkey = PGPainless.readKeyRing().publicKeyRing(nmipublicKeyFile.toURL().openStream());
+        } else {
+            throw new IOException();
         }
 
 

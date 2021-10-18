@@ -5,9 +5,11 @@
 
 package dev.droppinganvil.v3.network.nodemesh;
 
+import dev.droppinganvil.v3.crypt.core.CryptServiceProvider;
+import dev.droppinganvil.v3.crypt.core.exceptions.DecryptionFailureException;
 import dev.droppinganvil.v3.network.nodemesh.events.NetworkEvent;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.Queue;
@@ -22,12 +24,15 @@ public class InConnectionManager {
         serverSocket = new ServerSocket(i);
     }
 
-    public void processEvent() {
+    public void processEvent() throws IOException, DecryptionFailureException {
         synchronized (eventQueue) {
             NetworkEvent ne = eventQueue.poll();
             if (ne!=null) {
                 switch (ne.eventType) {
-
+                    case ACCOUNT_CREATE:
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        CryptServiceProvider.encryptionProvider.decrypt(new ByteArrayInputStream(ne.data.getBytes()), baos);
+                        baos.toString()
                 }
             }
         }

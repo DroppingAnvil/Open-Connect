@@ -83,8 +83,8 @@ public class IOThread implements Runnable {
         if (o instanceof OpenPgpMetadata) {
             OpenPgpMetadata opm = (OpenPgpMetadata) o;
             if (!opm.isVerified()) {
-                NodeMesh.in.blacklistedConnections.add(inputAddress);
-                throw new UnauthorizedNetworkConnectivityException();
+                //NodeMesh.in.blacklistedConnections.add(inputAddress);
+                //throw new UnauthorizedNetworkConnectivityException();
             }
         }
         out.close();

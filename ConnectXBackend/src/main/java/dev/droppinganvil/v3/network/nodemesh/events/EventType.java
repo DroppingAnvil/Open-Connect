@@ -6,6 +6,10 @@ public enum EventType {
      */
     GLOBAL_RESOURCE_UPDATE,
     /**
+     * A device account request
+     */
+    ACCOUNT_CREATE,
+    /**
      * Device account is created, in ConnectX Managed it must be sent from NAS
      */
     ACCOUNT_CREATED,
