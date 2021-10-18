@@ -26,8 +26,18 @@ public class PainlessCryptProvider extends CryptProvider {
     public PainlessCryptProvider() {
         super("Encryption Layer", "Core");
     }
+
+    /**
+     * On board secret key
+     */
     private static PGPSecretKeyRing secretKey;
-    private static PGPPublicKeyRingCollection publicKeys;
+    /**
+     * All network public keys
+     */
+    public static PGPPublicKeyRingCollection publicKeys;
+    /**
+     * On board public key
+     */
     private PGPPublicKeyRing publicKey;
     private SecretKeyRingProtector protector = SecretKeyRingProtector.unprotectedKeys();
 
@@ -57,6 +67,7 @@ public class PainlessCryptProvider extends CryptProvider {
                     .onInputStream(is)
                     .withOptions(new ConsumerOptions()
                             .addDecryptionKey(secretKey, protector)
+                            .addVerificationCerts(publicKeys)
                     );
             Streams.pipeAll(decryptionStream, os);
             decryptionStream.close();

@@ -7,10 +7,7 @@ import dev.droppinganvil.v3.network.nodemesh.NetworkContainer;
 import dev.droppinganvil.v3.utils.obj.BaseStatus;
 import org.pgpainless.decryption_verification.OpenPgpMetadata;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -74,15 +71,19 @@ public class IOThread implements Runnable {
             os.close();
         }
     }
-    public static void processNetworkContainer(InputStream is) throws IOException, DecryptionFailureException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        Object o = CryptServiceProvider.encryptionProvider.decrypt(is, baos);
+    public static void processNetworkContainer(InputStream is) throws IOException, DecryptionFailureException, ClassNotFoundException {
+        PipedInputStream in = new PipedInputStream();
+        PipedOutputStream out = new PipedOutputStream(in);
+        //ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        Object o = CryptServiceProvider.encryptionProvider.decrypt(is, out);
         if (o instanceof OpenPgpMetadata) {
             OpenPgpMetadata opm = (OpenPgpMetadata) o;
             //TODO
         }
+            out.close();
+        //TODO max size
+        NetworkContainer nc = (NetworkContainer) new NetworkContainerObjectInputStream(in).readObject();
 
-        NetworkContainer nc = ()
 
     }
     public static boolean processJob(IOJob ioJob, boolean root) throws IOException {
