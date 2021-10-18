@@ -4,7 +4,6 @@ import dev.droppinganvil.v3.Configuration;
 import dev.droppinganvil.v3.crypt.core.CryptServiceProvider;
 import dev.droppinganvil.v3.crypt.core.exceptions.DecryptionFailureException;
 import dev.droppinganvil.v3.network.UnauthorizedNetworkConnectivityException;
-import dev.droppinganvil.v3.network.nodemesh.InConnectionManager;
 import dev.droppinganvil.v3.network.nodemesh.NodeMesh;
 import dev.droppinganvil.v3.network.nodemesh.events.NetworkEvent;
 import dev.droppinganvil.v3.utils.obj.BaseStatus;
@@ -33,22 +32,24 @@ public class IOThread implements Runnable {
     @Override
     public void run() {
         while (run) {
-            IOJob ioJob = jobQueue.poll();
-            if (ioJob != null) {
-                try {
-                    processJob(ioJob, true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    ioJob.success = false;
-                    ioJob.doAfter(false);
-                }
-                ioJob.success = true;
-                ioJob.doAfter(true);
-            } else {
-                try {
-                    Thread.sleep(sleep);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+            synchronized (jobQueue) {
+                IOJob ioJob = jobQueue.poll();
+                if (ioJob != null) {
+                    try {
+                        processJob(ioJob, true);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        ioJob.success = false;
+                        ioJob.doAfter(false);
+                    }
+                    ioJob.success = true;
+                    ioJob.doAfter(true);
+                } else {
+                    try {
+                        Thread.sleep(sleep);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
@@ -102,8 +103,10 @@ public class IOThread implements Runnable {
                 case REVERSE:
                     ioJob.os = reverse(ioJob.is, ioJob.closeAfter);
                     break;
-                case DECRYPT:
-
+                case NETWORK_READ:
+                    NetworkInputIOJob ioj = (NetworkInputIOJob) ioJob;
+                    processNetworkInput(ioJob.is, ioj.ina);
+                    break;
             }
             if (ioJob.next != null) {
                 processJob(ioJob.next, false);

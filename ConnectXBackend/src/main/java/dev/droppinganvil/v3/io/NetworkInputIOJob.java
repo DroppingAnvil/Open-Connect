@@ -13,6 +13,7 @@ public class NetworkInputIOJob extends IOJob {
     public String ina;
     public NetworkInputIOJob(InputStream is, String ina) {
         super(is, null, true);
+        jt = JobType.NETWORK_READ;
         this.ina = ina;
     }
 

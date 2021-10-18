@@ -1,32 +1,21 @@
 package dev.droppinganvil.v3.network.nodemesh;
 
-import me.droppinganvil.core.mysql.annotations.MemoryOnly;
-
 import java.io.Serializable;
 import java.util.List;
 
 public class Node implements Serializable {
     /**
-     * Known URLs for initial handshake
+     * URL for connection
      */
-    public List<NodeURL> webURLs;
+    public String url;
     /**
-     * Public Key
+     * Address for connection
      */
-    public String publicKey;
+    public String isa;
     /**
-     * Only present when initializing device
+     * Device's network account id
      */
-    @MemoryOnly
-    public String privateKey;
-    /**
-     * Device ID
-     */
-    public String deviceID;
-    /**
-     * Friendly name
-     */
-    public String name;
+    public String networkAccountID;
     /**
      * Total storage volume available
      */
@@ -35,4 +24,8 @@ public class Node implements Serializable {
      * Total storage volume
      */
     public Long maxCapacity;
+    /**
+     * Roles node provides
+     */
+    public List<Role> roles;
 }
