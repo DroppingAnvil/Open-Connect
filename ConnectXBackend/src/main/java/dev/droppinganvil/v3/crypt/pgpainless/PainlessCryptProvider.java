@@ -65,7 +65,7 @@ public class PainlessCryptProvider extends CryptProvider {
         }
     }
     @Override
-    public Object decrypt(InputStream is, OutputStream os) throws DecryptionFailureException {
+    public Object decrypt(InputStream is, OutputStream os, String deviceID) throws DecryptionFailureException {
         try {
             DecryptionStream decryptionStream = PGPainless.decryptAndOrVerify()
                     .onInputStream(is)

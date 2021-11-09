@@ -34,7 +34,7 @@ public class ConnectXContainer implements Serializable {
      * Users data container, used to store preferences and data only needed on client device.
      * Not accessible.
      */
-    public String dataContainer;
+    public byte[] dataContainer;
 
     /**
      * When a device joins the network it should generate its own key then upload its generated dataContainer

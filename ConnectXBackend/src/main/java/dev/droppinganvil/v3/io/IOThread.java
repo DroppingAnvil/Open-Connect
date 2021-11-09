@@ -1,5 +1,6 @@
 package dev.droppinganvil.v3.io;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.droppinganvil.v3.Configuration;
 import dev.droppinganvil.v3.crypt.core.CryptServiceProvider;
 import dev.droppinganvil.v3.crypt.core.exceptions.DecryptionFailureException;
@@ -14,6 +15,7 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class IOThread implements Runnable {
+    private static ObjectMapper mapper = new ObjectMapper();
     public static boolean run = false;
     public static final Queue<IOJob> jobQueue = new ConcurrentLinkedQueue<>();
     public Long sleep;
@@ -76,10 +78,8 @@ public class IOThread implements Runnable {
         }
     }
     public static void processNetworkInput(InputStream is, String inputAddress) throws IOException, DecryptionFailureException, ClassNotFoundException, UnauthorizedNetworkConnectivityException {
-        PipedInputStream in = new PipedInputStream();
-        PipedOutputStream out = new PipedOutputStream(in);
-        //ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        Object o = CryptServiceProvider.encryptionProvider.decrypt(is, out);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        Object o = CryptServiceProvider.encryptionProvider.decrypt(is, baos);
         if (o instanceof OpenPgpMetadata) {
             OpenPgpMetadata opm = (OpenPgpMetadata) o;
             if (!opm.isVerified()) {
@@ -87,9 +87,11 @@ public class IOThread implements Runnable {
                 //throw new UnauthorizedNetworkConnectivityException();
             }
         }
-        out.close();
         //TODO max size
-        NetworkEvent ne = (NetworkEvent) new NetworkEventObjectInputStream(in).readObject();
+        String json = baos.toString("UTF-8");
+        NetworkEvent ne = mapper.convertValue(json, NetworkEvent.class);
+
+
         synchronized (NodeMesh.in.eventQueue) {
             NodeMesh.in.eventQueue.add(ne);
         }

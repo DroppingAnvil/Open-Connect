@@ -5,8 +5,11 @@
 
 package dev.droppinganvil.v3.network.nodemesh;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.droppinganvil.v3.crypt.core.CryptServiceProvider;
 import dev.droppinganvil.v3.crypt.core.exceptions.DecryptionFailureException;
+import dev.droppinganvil.v3.edge.ConnectXContainer;
 import dev.droppinganvil.v3.network.nodemesh.events.NetworkEvent;
 
 import java.io.*;
@@ -24,17 +27,29 @@ public class InConnectionManager {
         serverSocket = new ServerSocket(i);
     }
 
-    public void processEvent() throws IOException, DecryptionFailureException {
+    public void processEvent(ObjectMapper mapper) throws IOException, DecryptionFailureException {
         synchronized (eventQueue) {
             NetworkEvent ne = eventQueue.poll();
             if (ne!=null) {
                 switch (ne.eventType) {
                     case ACCOUNT_CREATE:
-                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        CryptServiceProvider.encryptionProvider.decrypt(new ByteArrayInputStream(ne.data.getBytes()), baos);
-                        baos.toString()
+                        ConnectXContainer cxc = (ConnectXContainer) processObject(mapper, ne);
+
                 }
             }
         }
+    }
+    public static Object processObject(ObjectMapper mapper, NetworkEvent ne) throws JsonProcessingException, DecryptionFailureException, UnsupportedEncodingException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        CryptServiceProvider.encryptionProvider.decrypt(new ByteArrayInputStream(ne.data), baos);
+        String json = baos.toString("UTF-8");
+        switch (ne.eventType) {
+            case ACCOUNT_CREATE:
+                return mapper.readValue(json, ConnectXContainer.class);
+        }
+        return null;
+    }
+    public static byte[] processJSON(ObjectMapper mapper, Object o) throws JsonProcessingException {
+        return mapper.writeValueAsBytes(o);
     }
 }

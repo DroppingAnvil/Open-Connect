@@ -49,7 +49,7 @@ public abstract class CryptProvider {
         FileOutputStream decryptedOutput = new FileOutputStream(destination);
         decrypt(input, decryptedOutput);
     }
-    public Object decrypt(InputStream is, OutputStream os) throws DecryptionFailureException {
+    public Object decrypt(InputStream is, OutputStream os, String deviceID) throws DecryptionFailureException {
         return null;
     }
     public Boolean verify(String data, String networkDeviceID) throws DecryptionFailureException {

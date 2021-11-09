@@ -12,5 +12,13 @@ public class NetworkEvent implements Serializable {
     /**
      * Event specific data
      */
-    public String data;
+    public byte[] data;
+    /**
+     * Network ID of transmission sender. Must be set
+     */
+    public String NID = "UNKNOWN";
+    /**
+     * NID of network event initiator. Must be set
+     */
+    public String NEI = "UNKNOWN";
 }
