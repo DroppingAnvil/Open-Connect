@@ -7,7 +7,6 @@ package dev.droppinganvil.v3.network.nodemesh;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.droppinganvil.v3.crypt.core.CryptServiceProvider;
 import dev.droppinganvil.v3.crypt.core.exceptions.DecryptionFailureException;
 import dev.droppinganvil.v3.edge.ConnectXContainer;
 import dev.droppinganvil.v3.network.nodemesh.events.NetworkEvent;
@@ -41,7 +40,7 @@ public class InConnectionManager {
     }
     public static Object processObject(ObjectMapper mapper, NetworkEvent ne) throws JsonProcessingException, DecryptionFailureException, UnsupportedEncodingException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        CryptServiceProvider.encryptionProvider.decrypt(new ByteArrayInputStream(ne.data), baos);
+        CryptServiceProvider.encryptionProvider.decryptNetworked(new ByteArrayInputStream(ne.data), baos, ne.NEI);
         String json = baos.toString("UTF-8");
         switch (ne.eventType) {
             case ACCOUNT_CREATE:

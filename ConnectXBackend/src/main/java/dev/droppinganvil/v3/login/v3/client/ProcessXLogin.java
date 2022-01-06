@@ -6,8 +6,7 @@
 package dev.droppinganvil.v3.login.v3.client;
 
 import dev.droppinganvil.v3.AnvilApp;
-import dev.droppinganvil.v3.LoginForm;
-import dev.droppinganvil.v3.RequiresLogin;
+import dev.droppinganvil.v3.utils.obj.RequiresLogin;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;

@@ -25,7 +25,15 @@ public class Node implements Serializable {
      */
     public Long maxCapacity;
     /**
+     * Node public key
+     */
+    public byte[] publicKey;
+    /**
      * Roles node provides
      */
     public List<Role> roles;
+    /**
+     * User defined non unique device name
+     */
+    public String nicename;
 }

@@ -9,13 +9,13 @@ import org.pgpainless.PGPainless;
 import org.pgpainless.algorithm.DocumentSignatureType;
 import org.pgpainless.decryption_verification.ConsumerOptions;
 import org.pgpainless.decryption_verification.DecryptionStream;
-import org.pgpainless.decryption_verification.OpenPgpMetadata;
 import org.pgpainless.encryption_signing.EncryptionOptions;
 import org.pgpainless.encryption_signing.EncryptionStream;
 import org.pgpainless.encryption_signing.ProducerOptions;
 import org.pgpainless.encryption_signing.SigningOptions;
 import org.pgpainless.key.protection.SecretKeyRingProtector;
 import org.pgpainless.key.util.KeyRingUtils;
+import org.pgpainless.util.Passphrase;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -65,7 +65,7 @@ public class PainlessCryptProvider extends CryptProvider {
         }
     }
     @Override
-    public Object decrypt(InputStream is, OutputStream os, String deviceID) throws DecryptionFailureException {
+    public Object decryptNetworked(InputStream is, OutputStream os, String deviceID) throws DecryptionFailureException {
         try {
             DecryptionStream decryptionStream = PGPainless.decryptAndOrVerify()
                     .onInputStream(is)
@@ -84,18 +84,27 @@ public class PainlessCryptProvider extends CryptProvider {
         }
     }
     @Override
-    public void setup(String s, File dir) throws Exception {
-        File privateKeyFile = new File(dir, "privatekey.txt");
+    public void setup(String id, String s, File dir) throws Exception {
+        File privateKeyFile = new File(dir, "key.cx");
         if (privateKeyFile.exists()) {
-            secretKey = PGPainless.readKeyRing().secretKeyRing(privateKeyFile.toURL().openStream());
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            DecryptionStream ds = PGPainless.decryptAndOrVerify().onInputStream(privateKeyFile.toURL().openStream()).withOptions(new ConsumerOptions()
+            .addDecryptionPassphrase(Passphrase.fromPassword(s)));
+            Streams.pipeAll(ds, baos);
+            ds.close();
+            secretKey = PGPainless.readKeyRing().secretKeyRing(baos.toByteArray());
         } else {
             secretKey = PGPainless.generateKeyRing()
-                    .modernKeyRing("ConnectX <contact@anvildevelopment.us>", s);
+                    .modernKeyRing(id, s);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
             FileOutputStream fos = new FileOutputStream(privateKeyFile);
-            secretKey.encode(fos);
+            secretKey.encode(baos);
+            EncryptionStream es = PGPainless.encryptAndOrSign().onOutputStream(fos).withOptions(ProducerOptions.encrypt(new EncryptionOptions()
+            .addPassphrase(Passphrase.fromPassword(s))));
+            Streams.pipeAll(new ByteArrayInputStream(baos.toByteArray()), es);
         }
         publicKey = KeyRingUtils.publicKeyRingFrom(secretKey);
-        File publicKeyFile = new File(dir, "publickeys.txt");
+        File publicKeyFile = new File(dir, "publickeys.cx");
         if (publicKeyFile.exists()) {
             publicKeys = PGPainless.readKeyRing().publicKeyRingCollection(publicKeyFile.toURL().openStream());
         } else {

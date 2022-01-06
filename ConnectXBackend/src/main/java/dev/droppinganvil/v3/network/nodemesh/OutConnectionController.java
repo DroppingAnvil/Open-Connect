@@ -1,16 +1,16 @@
 package dev.droppinganvil.v3.network.nodemesh;
 
-import dev.droppinganvil.v3.ConnectXAPI;
+import dev.droppinganvil.v3.ConnectX;
 
 import java.util.List;
 
 public class OutConnectionController {
-    public ConnectXAPI connectXAPI;
+    public ConnectX connectXAPI;
     public List<Node> locateServices() {
 
     }
 
-    public OutConnectionController(ConnectXAPI api) {
+    public OutConnectionController(ConnectX api) {
         connectXAPI = api;
     }
 

@@ -1,7 +1,7 @@
 package dev.droppinganvil.v3.login;
 
 import dev.droppinganvil.v3.AnvilApp;
-import dev.droppinganvil.v3.RequiresLogin;
+import dev.droppinganvil.v3.utils.obj.RequiresLogin;
 import javafx.stage.Stage;
 import okhttp3.OkHttpClient;
 

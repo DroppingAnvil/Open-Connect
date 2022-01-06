@@ -1,9 +1,9 @@
 /*
- * Copyright (c) 2021 Christopher (DroppingAnvil) Willett
- * All Rights Reserved.
+ * Copyright (c) 2022. Christopher Willett
+ * All Rights Reserved
  */
 
-package dev.droppinganvil.v3.login;
+package dev.droppinganvil.v3.edge.jclient;
 
 import dev.droppinganvil.v3.AnvilApp;
 import dev.droppinganvil.v3.utils.obj.RequiresLogin;
@@ -18,25 +18,23 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import okhttp3.OkHttpClient;
 
 import java.io.File;
 import java.io.IOException;
 
-public class Login {
-    public static Login instance;
-    public static OkHttpClient httpClient;
-    public TextField email_entry;
+public class ContainerUnlock {
+    public static ContainerUnlock instance;
+    public TextField id_entry;
     public PasswordField password_entry;
     public Button continue_button;
     public Label login_response;
 
     public static FXMLLoader getLoader() {
-        return new FXMLLoader(Login.class.getResource("Login.fxml"));
+        return new FXMLLoader(dev.droppinganvil.v3.login.Login.class.getResource("Login.fxml"));
     }
     public static FXMLLoader getTestLoader() {
         try {
-            return new FXMLLoader(new File("/Users/droppinganvil/Desktop/DADSDK/src/main/resources/Login.fxml").toURL());
+            return new FXMLLoader(new File("/UsLogin.fxml").toURL());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -52,12 +50,10 @@ public class Login {
         primaryStage.show();
         instance.continue_button.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                LoginForm loginForm = new LoginForm();
-                loginForm.id = instance.email_entry.getText();
-                loginForm.auth = instance.password_entry.getText();
+                CryptService
                 String response;
                 try {
-                    response = LoginRequest.login(loginForm, httpClient);
+                    response =
                 } catch (IOException ioException) {
                     response = "Error during login, Please try again later";
                     ioException.printStackTrace();
@@ -76,3 +72,4 @@ public class Login {
         });
     }
 }
+

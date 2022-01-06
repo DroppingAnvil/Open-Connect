@@ -2,7 +2,6 @@ package dev.droppinganvil.v3.io;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.droppinganvil.v3.Configuration;
-import dev.droppinganvil.v3.crypt.core.CryptServiceProvider;
 import dev.droppinganvil.v3.crypt.core.exceptions.DecryptionFailureException;
 import dev.droppinganvil.v3.network.UnauthorizedNetworkConnectivityException;
 import dev.droppinganvil.v3.network.nodemesh.NodeMesh;
@@ -79,7 +78,7 @@ public class IOThread implements Runnable {
     }
     public static void processNetworkInput(InputStream is, String inputAddress) throws IOException, DecryptionFailureException, ClassNotFoundException, UnauthorizedNetworkConnectivityException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        Object o = CryptServiceProvider.encryptionProvider.decrypt(is, baos);
+        Object o = CryptServiceProvider.encryptionProvider.decryptNetworked(is, baos);
         if (o instanceof OpenPgpMetadata) {
             OpenPgpMetadata opm = (OpenPgpMetadata) o;
             if (!opm.isVerified()) {

@@ -38,18 +38,7 @@ public abstract class CryptProvider {
             encrypt(input, encryptedOutput, publicKey);
             if (!in.delete()) throw new IOException();
     }
-    public void decryptAndCopyFile(File in, File outDir) throws IOException, DecryptionFailureException {
-        if (!in.exists() || IPXFileUtils.checkBasicIORights(in)) throw new IOException();
-        String name = in.getName();
-        File destination = new File(outDir, name);
-        if (destination.exists() && IPXFileUtils.checkBasicIORights(destination)) {
-            if (!destination.delete()) throw new IOException();
-        }
-        FileInputStream input = new FileInputStream(in);
-        FileOutputStream decryptedOutput = new FileOutputStream(destination);
-        decrypt(input, decryptedOutput);
-    }
-    public Object decrypt(InputStream is, OutputStream os, String deviceID) throws DecryptionFailureException {
+    public Object decryptNetworked(InputStream is, OutputStream os, String deviceID) throws DecryptionFailureException {
         return null;
     }
     public Boolean verify(String data, String networkDeviceID) throws DecryptionFailureException {
@@ -75,7 +64,7 @@ public abstract class CryptProvider {
         if (this.tempdir != null) throw new TempDirectorySolidified();
         tempdir = dir;
     }
-    public void setup(String s, File dir) throws Exception {
+    public void setup(String id, String s, File dir) throws Exception {
 
     }
     public void shutdown() {
@@ -84,29 +73,7 @@ public abstract class CryptProvider {
 
 
     public void doSelfTest() {
-        try {
-            //TODO better testing
-            doFileStructureCheck();
-        } catch (IOException e) {
-            e.printStackTrace();
-            //Ignore for now
-        } catch (CryptInternalVerificationException e) {
-            e.printStackTrace();
-            initiateShutdown(e.getMessage(), false);
-        }
-    }
-    public void initiateShutdown(String s, Boolean normal) {
-            System.out.println("---- Crypt System Shutdown ----");
-            System.out.println("The current CryptProvider will be flushed and disabled");
-            if (!normal) {
-                System.out.println("Please contact your system administrator before continuing");
-                System.out.print("This is a serious security concern and could lead to more system failures depending on implementation");
-                System.out.println("Extra Data");
-                System.out.println(s);
-            } else {
-                System.out.println("Received normal shutdown instruction, if this was not intentional contact your system administrator immediately");
-            }
-            System.out.println("---- Crypt System Shutdown ----");
+
     }
 
 }

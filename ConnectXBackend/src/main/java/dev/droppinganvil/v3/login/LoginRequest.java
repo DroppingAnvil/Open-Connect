@@ -7,7 +7,6 @@ package dev.droppinganvil.v3.login;
 
 import dev.droppinganvil.v3.Adapters;
 import dev.droppinganvil.v3.Configuration;
-import dev.droppinganvil.v3.LoginForm;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
