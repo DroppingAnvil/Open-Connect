@@ -2,6 +2,7 @@ package dev.droppinganvil.v3.io;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.droppinganvil.v3.Configuration;
+import dev.droppinganvil.v3.ConnectX;
 import dev.droppinganvil.v3.crypt.core.exceptions.DecryptionFailureException;
 import dev.droppinganvil.v3.network.UnauthorizedNetworkConnectivityException;
 import dev.droppinganvil.v3.network.nodemesh.NodeMesh;
@@ -10,22 +11,22 @@ import dev.droppinganvil.v3.utils.obj.BaseStatus;
 import org.pgpainless.decryption_verification.OpenPgpMetadata;
 
 import java.io.*;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class IOThread implements Runnable {
     private static ObjectMapper mapper = new ObjectMapper();
-    public static boolean run = false;
-    public static final Queue<IOJob> jobQueue = new ConcurrentLinkedQueue<>();
+    public boolean run = false;
     public Long sleep;
     public BaseStatus status;
+    public ConnectX cx;
 
-    public IOThread(Long sleep) {
+    public IOThread(Long sleep, ConnectX cx) {
+        this.cx = cx;
         assert sleep != null;
         this.sleep = sleep;
     }
 
-    public IOThread(Long sleep, BaseStatus bs) {
+    public IOThread(Long sleep, BaseStatus bs, ConnectX cx) {
+        this.cx = cx;
         assert sleep != null;
         this.sleep = sleep;
         status = bs;
@@ -33,8 +34,8 @@ public class IOThread implements Runnable {
     @Override
     public void run() {
         while (run) {
-            synchronized (jobQueue) {
-                IOJob ioJob = jobQueue.poll();
+            synchronized (cx.jobQueue) {
+                IOJob ioJob = cx.jobQueue.poll();
                 if (ioJob != null) {
                     try {
                         processJob(ioJob, true);
@@ -76,9 +77,9 @@ public class IOThread implements Runnable {
             os.close();
         }
     }
-    public static void processNetworkInput(InputStream is, String inputAddress) throws IOException, DecryptionFailureException, ClassNotFoundException, UnauthorizedNetworkConnectivityException {
+    public void processNetworkInput(InputStream is, String inputAddress) throws IOException, DecryptionFailureException, ClassNotFoundException, UnauthorizedNetworkConnectivityException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        Object o = CryptServiceProvider.encryptionProvider.decryptNetworked(is, baos);
+        Object o = cx.encryptionProvider.decryptNetworked(is, baos, null);
         if (o instanceof OpenPgpMetadata) {
             OpenPgpMetadata opm = (OpenPgpMetadata) o;
             if (!opm.isVerified()) {
@@ -95,7 +96,7 @@ public class IOThread implements Runnable {
             NodeMesh.in.eventQueue.add(ne);
         }
     }
-    public static boolean processJob(IOJob ioJob, boolean root) throws IOException {
+    public boolean processJob(IOJob ioJob, boolean root) throws IOException {
         try {
             switch (ioJob.jt) {
                 case WRITE:

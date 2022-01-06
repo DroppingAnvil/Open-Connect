@@ -2,19 +2,19 @@ package dev.droppinganvil.v3.network.nodemesh;
 
 public enum Role {
     /**
-     * Stores a copy of all ConnectXContainers, Helps network communicate.
+     * Stores persistent service data
      */
     CLOUD,
     /**
-     * Stores data for GlobalDrive and/or CloudX
+     * Stores bulk data for GlobalDrive and/or CloudX
      */
     CLOUD_RESOURCE,
     /**
-     * Stores a copy of all ConnectXContainers, Communicates with outside networks
+     * Stores relevant ConnectXContainers. Useful when needing a moderator between a peer to peer connection
      */
-    GATEWAY,
+    PROXY,
     /**
-     * Only stores relevant ConnectXContainers and service data, Lower verification requirements, Lower security
+     * Only stores relevant ConnectXContainers and service data. Can be used for immediate data transfer
      */
     CLIENT,
 }

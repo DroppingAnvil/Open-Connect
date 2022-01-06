@@ -50,24 +50,8 @@ public class ContainerUnlock {
         primaryStage.show();
         instance.continue_button.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                CryptService
-                String response;
-                try {
-                    response =
-                } catch (IOException ioException) {
-                    response = "Error during login, Please try again later";
-                    ioException.printStackTrace();
-                }
-                if (!response.contains(" ")) {
-                    AnvilApp.client.key = response;
-                } else {
-                    instance.login_response.setText(response);
-                }
-                try {
-                    app.loginSuccess();
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                }
+                instance.login_response.setText("Decrypting...");
+                app.attemptLogin(instance.id_entry.getText(), instance.password_entry.getText())
             }
         });
     }

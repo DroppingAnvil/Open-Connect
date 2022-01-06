@@ -10,6 +10,7 @@ import dev.droppinganvil.v3.ConnectX;
 import dev.droppinganvil.v3.utils.obj.RequiresLogin;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 
 public class ConnectXClient extends AnvilApp implements RequiresLogin {
@@ -28,7 +29,15 @@ public class ConnectXClient extends AnvilApp implements RequiresLogin {
     }
 
     @Override
-    public void loginSuccess() throws IOException {
-
+    public boolean attemptLogin(String id, String auth) throws IOException {
+        File dir = new File(id);
+        if (!dir.exists()) return false;
+        try {
+            network.encryptionProvider.setup(id, auth, network.cxRoot);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

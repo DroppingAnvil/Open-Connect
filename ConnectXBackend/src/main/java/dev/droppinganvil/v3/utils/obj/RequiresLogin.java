@@ -8,5 +8,5 @@ package dev.droppinganvil.v3.utils.obj;
 import java.io.IOException;
 
 public interface RequiresLogin {
-    boolean attemptLogin() throws IOException;
+    boolean attemptLogin(String id, String auth) throws IOException;
 }

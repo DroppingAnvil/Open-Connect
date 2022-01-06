@@ -19,7 +19,7 @@ public class ConnectXContainer implements Serializable {
      */
     public String networkAccountID;
     /**
-     * For future use, should be a serialized product package signed by NMI or NAS
+     * For future use, should be a JSON product package signed by NMI or NAS
      */
     public String productPackage;
     /**

@@ -6,9 +6,6 @@ import java.util.List;
 
 public class OutConnectionController {
     public ConnectX connectXAPI;
-    public List<Node> locateServices() {
-
-    }
 
     public OutConnectionController(ConnectX api) {
         connectXAPI = api;
