@@ -17,4 +17,8 @@ public enum Role {
      * Only stores relevant ConnectXContainers and service data. Can be used for immediate data transfer
      */
     CLIENT,
+    /**
+     * Stores relevant data for transmitting data through HTTP
+     */
+    GATEWAY_HTTP,
 }

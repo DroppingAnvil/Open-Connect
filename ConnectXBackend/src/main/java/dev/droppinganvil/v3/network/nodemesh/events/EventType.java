@@ -26,8 +26,8 @@ public enum EventType {
      */
     SERVICE_MESSAGEX,
     /**
-     * Used when transmitting CloudX service data
+     * Used when transmitting initial data
      */
-    SERVICE_CLOUDX,
+    HELLO_WORLD,
     ;
 }

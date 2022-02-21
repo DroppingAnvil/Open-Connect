@@ -9,7 +9,9 @@ import java.io.Serializable;
 
 public class Configuration implements Serializable {
     public static String SDF_FORMAT = "S-m-H-a-EEE-F-M-y";
-    public static String netID = "TESTNET-PRE-ALPHA-0";
+    public static String netID = "TESTNET0";
+    public static String nmi_pub = "";
+    public static Long e = 0L;
     public static Boolean active = true;
     public static final Integer rateLimit = 15;
     public static final Integer rateLimitSleep = 1000;

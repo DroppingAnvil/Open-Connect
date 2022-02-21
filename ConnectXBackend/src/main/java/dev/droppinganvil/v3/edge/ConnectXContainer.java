@@ -27,10 +27,6 @@ public class ConnectXContainer implements Serializable {
      */
     public String publicKey;
     /**
-     * Container for MessageX service
-     */
-    public MessageXContainer messageXContainer;
-    /**
      * Users data container, used to store preferences and data only needed on client device.
      * Not accessible.
      */
