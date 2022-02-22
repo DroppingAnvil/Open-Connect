@@ -5,4 +5,6 @@ public enum Platform {
     LINUX_GENERIC,
     OSX,
     OSX_ZSH,
+    ConnectX,
+    Unknown,
 }

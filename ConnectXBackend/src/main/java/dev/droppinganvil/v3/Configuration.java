@@ -6,11 +6,14 @@
 package dev.droppinganvil.v3;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Configuration implements Serializable {
     public static String SDF_FORMAT = "S-m-H-a-EEE-F-M-y";
     public static String netID = "TESTNET0";
     public static String nmi_pub = "";
+    public static List<String> backendSet = new ArrayList<>();
     public static Long e = 0L;
     public static Boolean active = true;
     public static final Integer rateLimit = 15;

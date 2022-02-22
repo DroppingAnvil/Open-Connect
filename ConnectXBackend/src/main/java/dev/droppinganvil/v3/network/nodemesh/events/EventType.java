@@ -29,5 +29,9 @@ public enum EventType {
      * Used when transmitting initial data
      */
     HELLO_WORLD,
+    /**
+     * Internal Messaging
+     */
+    MESSAGE,
     ;
 }
