@@ -2,25 +2,25 @@ package dev.droppinganvil.v3.network.nodemesh.events;
 
 public enum EventType {
     /**
-     * Resource common to all nodes has been updated, in ConnectX Managed it must be sent from NMI or NAS
+     * Used when
+     */
+    DICTOINARY_EDIT,
+    /**
+     * Resource common to all nodes has been updated
      */
     GLOBAL_RESOURCE_UPDATE,
     /**
-     * A device account request
+     * A Node has submitted their generated public key and ID
      */
     ACCOUNT_CREATE,
     /**
-     * Device account is created, in ConnectX Managed it must be sent from NAS
+     * New Node is recognized and their data is submitted
      */
     ACCOUNT_CREATED,
     /**
-     * Device account has been updated
+     * Schedules a network restart
      */
-    ACCOUNT_UPDATE,
-    /**
-     * "Temporary" node shutdown (Can only be sent from NMI)
-     */
-    SIGTERM,
+    RESTART,
     /**
      * Used when transmitting MessageX service data
      */

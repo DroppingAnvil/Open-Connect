@@ -19,6 +19,10 @@ public class NetworkEvent implements Serializable {
      */
     public String target = "NETWORK";
     /**
+     * Mainly used when determining target network when an administrative event occurs
+     */
+    public String networkID;
+    /**
      * Event specific data
      */
     public byte[] data;
