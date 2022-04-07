@@ -10,6 +10,7 @@ import dev.droppinganvil.v3.crypt.pgpainless.PainlessCryptProvider;
 import dev.droppinganvil.v3.edge.ConnectXContainer;
 import dev.droppinganvil.v3.io.IOJob;
 import dev.droppinganvil.v3.network.nodemesh.Node;
+import dev.droppinganvil.v3.resourcecore.ResourceType;
 
 import java.io.File;
 import java.io.IOException;
@@ -44,6 +45,10 @@ public class ConnectX {
             //TODO network join 
         }
     }
+
+    public void connectNetwork(){}
+
+    public File locateResource(String networkID, ResourceType type, )
 
 
     /**
