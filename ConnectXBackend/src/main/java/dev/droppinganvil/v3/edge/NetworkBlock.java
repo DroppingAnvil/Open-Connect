@@ -5,16 +5,17 @@
 
 package dev.droppinganvil.v3.edge;
 
-import dev.droppinganvil.v3.network.nodemesh.Node;
 import dev.droppinganvil.v3.network.nodemesh.events.NetworkEvent;
-import us.anvildevelopment.v1.util1.database.annotations.MemoryOnly;
-
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class NetworkBlock implements Serializable {
     public Long block;
-    public Map<Long, NetworkEvent> networkEvents = new HashMap<>();
+    public Map<Integer, NetworkEvent> networkEvents;
+
+    public NetworkBlock(Long block) {
+        this.block = block;
+        networkEvents = new ConcurrentHashMap<>();
+    }
 }

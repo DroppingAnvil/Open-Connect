@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class NetworkLedger implements Serializable {
     public String networkID;
     public Long chainID;
-    public Long blockLength = 0L;
+    public Integer blockLength = 100;
     public boolean lock = false;
     @MemoryOnly
     public NetworkBlock current;
@@ -25,7 +25,7 @@ public class NetworkLedger implements Serializable {
     public Map<Long, NetworkBlock> blockMap = new ConcurrentHashMap<>();
 
 
-    public NetworkLedger(String networkID, Long chainID, Long blockLength) {
+    public NetworkLedger(String networkID, Long chainID) {
 
     }
 

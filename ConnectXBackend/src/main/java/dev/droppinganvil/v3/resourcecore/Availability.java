@@ -26,9 +26,9 @@ public enum Availability {
      */
     PRIVATE_CX,
     /**
-     * Private Resource. Should only be obtainable by owner.
+     * Private Resource. Should be obtainable through any connected network.
      */
-    PRIVATE_OWNER,
+    PRIVATE_SYSTEM,
 
 
 }

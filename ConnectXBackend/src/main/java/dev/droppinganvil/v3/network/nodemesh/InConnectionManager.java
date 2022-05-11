@@ -8,7 +8,7 @@ package dev.droppinganvil.v3.network.nodemesh;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.droppinganvil.v3.crypt.core.exceptions.DecryptionFailureException;
-import dev.droppinganvil.v3.edge.ConnectXContainer;
+import dev.droppinganvil.v3.edge.ConnectXAccount;
 import dev.droppinganvil.v3.network.nodemesh.events.NetworkEvent;
 
 import java.io.*;
@@ -32,7 +32,7 @@ public class InConnectionManager {
             if (ne!=null) {
                 switch (ne.eventType) {
                     case ACCOUNT_CREATE:
-                        ConnectXContainer cxc = (ConnectXContainer) processObject(mapper, ne);
+                        ConnectXAccount cxc = (ConnectXAccount) processObject(mapper, ne);
 
                 }
             }
@@ -44,7 +44,7 @@ public class InConnectionManager {
         String json = baos.toString("UTF-8");
         switch (ne.eventType) {
             case ACCOUNT_CREATE:
-                return mapper.readValue(json, ConnectXContainer.class);
+                return mapper.readValue(json, ConnectXAccount.class);
         }
         return null;
     }

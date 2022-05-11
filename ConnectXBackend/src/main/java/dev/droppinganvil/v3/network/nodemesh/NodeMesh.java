@@ -9,7 +9,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class NodeMesh {
-    public static final ConcurrentHashMap<String, Node> nodeMap = new ConcurrentHashMap<>();
+    public static ConcurrentHashMap<String, Node> nodeMap = new ConcurrentHashMap<>();
+    private static ConcurrentHashMap<String, CXNetwork> networkMap = new ConcurrentHashMap<>();
     public static InConnectionManager in;
     public static OutConnectionManager out;
     //Initial object must be signed by initiator
@@ -17,5 +18,8 @@ public class NodeMesh {
     //If it is not a global resource it must be encrypted using only the end recipients key then re encrypted for transport
     public NodeMesh(File rootDir) {
 
+    }
+    public boolean connectNetwork(CXNetwork cxnet) {
+        if (cxnet.)
     }
 }

@@ -17,12 +17,19 @@ public class NetworkDictionary implements Serializable {
      */
     public String nmi;
     public String networkID;
+    public Long networkCreate;
+    public Long lastUpdate;
     /**
-     * Public keys of authorized backend nodes
+     * Chain IDs
+     */
+    public Long c1;
+    public Long c2;
+    /**
+     * Public keys of authorized backend nodes, in perspective of network master
      */
     public List<String> backendSet = new ArrayList<>();
     /**
-     * Object to outline authentication
+     * Object to outline basic authentication
      */
     public BasicPermissionContainer networkPermissions;
 

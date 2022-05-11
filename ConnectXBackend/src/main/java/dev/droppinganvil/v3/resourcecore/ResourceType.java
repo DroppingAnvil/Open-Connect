@@ -7,9 +7,13 @@ package dev.droppinganvil.v3.resourcecore;
 
 public enum ResourceType {
     /**
-     * Used for internal networking.
+     * internal networking.
      */
     CX1,
+    /**
+     * internal networking.
+     */
+    CX2,
     /**
      * Internal services
      */

@@ -5,29 +5,21 @@ import java.util.List;
 
 public class Node implements Serializable {
     /**
-     * URL for connection
+     * HTTP URL for connection
      */
     public String url;
     /**
      * Address for connection
      */
-    public String isa;
+    public List<String> isa;
     /**
      * Device's network account id
      */
     public String networkAccountID;
     /**
-     * Total storage volume available
-     */
-    public Long capacity;
-    /**
-     * Total storage volume
-     */
-    public Long maxCapacity;
-    /**
      * Node public key
      */
-    public byte[] publicKey;
+    public String publicKey;
     /**
      * Roles node provides
      */

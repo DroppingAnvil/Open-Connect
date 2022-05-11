@@ -5,12 +5,12 @@
 
 package dev.droppinganvil.v3;
 
-import dev.droppinganvil.v3.edge.ConnectXContainer;
+import dev.droppinganvil.v3.edge.ConnectXAccount;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
 public class AnvilApp extends Application {
-    public static ConnectXContainer client;
+    public static ConnectXAccount client;
     public static Stage primaryStage;
 
     @Override

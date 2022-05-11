@@ -1,10 +1,10 @@
 package dev.droppinganvil.v3.io;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.droppinganvil.v3.Configuration;
 import dev.droppinganvil.v3.ConnectX;
 import dev.droppinganvil.v3.crypt.core.exceptions.DecryptionFailureException;
 import dev.droppinganvil.v3.network.UnauthorizedNetworkConnectivityException;
+import dev.droppinganvil.v3.network.nodemesh.NodeConfig;
 import dev.droppinganvil.v3.network.nodemesh.NodeMesh;
 import dev.droppinganvil.v3.network.nodemesh.events.NetworkEvent;
 import dev.droppinganvil.v3.utils.obj.BaseStatus;
@@ -59,7 +59,7 @@ public class IOThread implements Runnable {
     public static ByteArrayOutputStream reverse(InputStream is, Boolean closeAfter) throws IOException {
         //TODO
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        byte[] buffer = new byte[Configuration.IO_REVERSE_BYTE_BUFFER];
+        byte[] buffer = new byte[NodeConfig.IO_REVERSE_BYTE_BUFFER];
         while(is.read(buffer) > -1) {
             baos.write(buffer);
         }
@@ -68,7 +68,7 @@ public class IOThread implements Runnable {
     }
     public static void write(InputStream is, OutputStream os, Boolean closeAfter) throws IOException {
         //TODO
-        byte[] buffer = new byte[Configuration.IO_WRITE_BYTE_BUFFER];
+        byte[] buffer = new byte[NodeConfig.IO_WRITE_BYTE_BUFFER];
         while(is.read(buffer) > -1) {
             os.write(buffer);
         }

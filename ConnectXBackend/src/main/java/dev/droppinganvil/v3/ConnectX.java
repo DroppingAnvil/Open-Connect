@@ -7,16 +7,16 @@ package dev.droppinganvil.v3;
 
 import dev.droppinganvil.v3.crypt.core.CryptProvider;
 import dev.droppinganvil.v3.crypt.pgpainless.PainlessCryptProvider;
-import dev.droppinganvil.v3.edge.ConnectXContainer;
 import dev.droppinganvil.v3.io.IOJob;
 import dev.droppinganvil.v3.network.nodemesh.Node;
+import dev.droppinganvil.v3.resourcecore.Availability;
+import dev.droppinganvil.v3.resourcecore.Resource;
 import dev.droppinganvil.v3.resourcecore.ResourceType;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.Queue;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class ConnectX {
@@ -48,7 +48,9 @@ public class ConnectX {
 
     public void connectNetwork(){}
 
-    public File locateResource(String networkID, ResourceType type, )
+    public Resource locateResource(String networkID, ResourceType type, Availability availability) {
+
+    }
 
 
     /**
