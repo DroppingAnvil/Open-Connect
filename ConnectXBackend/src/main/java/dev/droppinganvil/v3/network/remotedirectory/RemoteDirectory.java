@@ -3,7 +3,6 @@ package dev.droppinganvil.v3.network.remotedirectory;
 import dev.droppinganvil.v3.Configuration;
 import dev.droppinganvil.v3.io.IOJob;
 import dev.droppinganvil.v3.io.IOThread;
-import dev.droppinganvil.v3.utils.permissions.BasicPermissionContainer;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -16,12 +15,7 @@ import java.io.*;
  */
 public class RemoteDirectory {
     public static OkHttpClient httpClient = new OkHttpClient();
-    /**
-     * RemoteDirectory URLs should be formatted ip/rdir?id=containerID?file=
-     * RemoteDirectory URLs, when using depth, should look similar to ip/rdir?id=containerID?file=dir1/dir2/
-     * If used with the ConnectX system user base containers are the user's id
-     */
-    public String url;
+
     public boolean readOnly;
     /**
      * Location of file in server scope

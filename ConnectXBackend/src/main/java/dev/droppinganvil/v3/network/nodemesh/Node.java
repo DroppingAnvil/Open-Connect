@@ -15,7 +15,7 @@ public class Node implements Serializable {
     /**
      * Device's network account id
      */
-    public String networkAccountID;
+    public String cxID;
     /**
      * Node public key
      */

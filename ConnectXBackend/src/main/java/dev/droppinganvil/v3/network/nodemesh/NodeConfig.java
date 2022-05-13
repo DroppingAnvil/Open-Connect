@@ -26,5 +26,5 @@ public class NodeConfig {
     //TODO
     public static Integer IO_INPUT_SKIP = 2048;
     public static Integer IO_MAX_INPUT = 10000000;
-    public
+    public static boolean autoUpdate = true;
 }

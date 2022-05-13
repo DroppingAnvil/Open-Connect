@@ -31,7 +31,7 @@ public class InConnectionManager {
             NetworkEvent ne = eventQueue.poll();
             if (ne!=null) {
                 switch (ne.eventType) {
-                    case ACCOUNT_CREATE:
+                    case AccountCreate:
                         ConnectXAccount cxc = (ConnectXAccount) processObject(mapper, ne);
 
                 }
@@ -43,7 +43,7 @@ public class InConnectionManager {
         CryptServiceProvider.encryptionProvider.decryptNetworked(new ByteArrayInputStream(ne.data), baos, ne.NEI);
         String json = baos.toString("UTF-8");
         switch (ne.eventType) {
-            case ACCOUNT_CREATE:
+            case AccountCreate:
                 return mapper.readValue(json, ConnectXAccount.class);
         }
         return null;

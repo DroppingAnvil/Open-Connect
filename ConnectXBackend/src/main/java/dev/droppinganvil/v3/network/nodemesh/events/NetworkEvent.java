@@ -15,19 +15,16 @@ public class NetworkEvent implements Serializable {
 
     public EventType eventType;
     /**
-     * Nodes that should process event. "NETWORK" targets all nodes and is much more efficient
+     * Nodes that should process event. "NETWORK" targets all nodes
      */
     public String target = "NETWORK";
-    /**
-     * Mainly used when determining target network when an administrative event occurs
-     */
     public String networkID;
     /**
      * Event specific data
      */
     public byte[] data;
     /**
-     * Network ID of transmission sender. Must be set
+     * cxID of transmission sender. Must be set
      */
     public String NID = "UNKNOWN";
     /**

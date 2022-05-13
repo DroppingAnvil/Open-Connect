@@ -5,19 +5,39 @@
 
 package dev.droppinganvil.v3.resourcecore;
 
+import dev.droppinganvil.v3.ConnectX;
+import dev.droppinganvil.v3.Permission;
 import dev.droppinganvil.v3.State;
 import dev.droppinganvil.v3.network.nodemesh.CXNetwork;
+import java.io.Serializable;
+import java.util.List;
 
-public class Resource {
+public class Resource implements Serializable {
     public ResourceType rt = null;
     public Availability a = null;
     public String resourceID;
     public String resourceLocation;
+    public List<String> locations;
     public String hash;
-    public Resource publish(CXNetwork cxnet, ResourceType type, Availability availability, String hash, String resourceLocation, Object o) {
+
+    public Resource publish(CXNetwork cxnet, ResourceType type, Availability availability, String hash, String resourceLocation, Object o) throws IllegalAccessException {
+        assert locations == null;
         assert cxnet.c2 != null;
         assert cxnet.networkDictionary != null;
         assert cxnet.networkState == State.READY;
-        if (cxnet.configuration.)
+        switch (availability) {
+            case PRIVATE_SYSTEM:
+                if (!cxnet.configuration.unlimitedUpload) {
+                    Integer w = cxnet.getVariableNetworkPermission(ConnectX.getOwnID(), Permission.AddResource.name());
+                    if (w!=null && w!=0) {
+                        if (ConnectX.locateResourceDIR(this).listFiles().length < w) {
+
+                        }
+                    }
+                        throw new IllegalAccessException();
+                        break;
+                }
+        }
     }
+    //TODO resourceID validate
 }

@@ -14,6 +14,6 @@ public class Configuration implements Serializable {
     public String nmi_pub;
     public List<String> backendSet;
     public Boolean active = true;
-    public Boolean resourceUpload = false;
+    public Boolean unlimitedUpload = false;
 
 }
