@@ -1,12 +1,9 @@
 package dev.droppinganvil.v3.network.nodemesh;
 
-import dev.droppinganvil.v3.network.nodemesh.events.NetworkEvent;
+import dev.droppinganvil.v3.network.CXNetwork;
 
 import java.io.File;
-import java.net.InetSocketAddress;
-import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class NodeMesh {
     public static ConcurrentHashMap<String, Node> nodeMap = new ConcurrentHashMap<>();

@@ -6,7 +6,7 @@ import dev.droppinganvil.v3.crypt.core.exceptions.DecryptionFailureException;
 import dev.droppinganvil.v3.network.UnauthorizedNetworkConnectivityException;
 import dev.droppinganvil.v3.network.nodemesh.NodeConfig;
 import dev.droppinganvil.v3.network.nodemesh.NodeMesh;
-import dev.droppinganvil.v3.network.nodemesh.events.NetworkEvent;
+import dev.droppinganvil.v3.network.events.NetworkEvent;
 import dev.droppinganvil.v3.utils.obj.BaseStatus;
 import org.pgpainless.decryption_verification.OpenPgpMetadata;
 
@@ -78,14 +78,12 @@ public class IOThread implements Runnable {
         }
     }
     public void processNetworkInput(InputStream is, String inputAddress) throws IOException, DecryptionFailureException, ClassNotFoundException, UnauthorizedNetworkConnectivityException {
+
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         Object o = cx.encryptionProvider.decryptNetworked(is, baos, null);
         if (o instanceof OpenPgpMetadata) {
             OpenPgpMetadata opm = (OpenPgpMetadata) o;
-            if (!opm.isVerified()) {
-                //NodeMesh.in.blacklistedConnections.add(inputAddress);
-                //throw new UnauthorizedNetworkConnectivityException();
-            }
+
         }
         //TODO max size
         String json = baos.toString("UTF-8");
@@ -94,6 +92,15 @@ public class IOThread implements Runnable {
 
         synchronized (NodeMesh.in.eventQueue) {
             NodeMesh.in.eventQueue.add(ne);
+        }
+    }
+    public void signObject(IOJob ioJob) throws Exception {
+        if (ioJob.is == null) {
+            OutputStream oss = new ByteArrayOutputStream();
+            cx.encryptionProvider.sign(null, oss);
+            ConnectX.serialize(String.valueOf(ioJob.o1), ioJob.o, oss);
+        } else {
+
         }
     }
     public boolean processJob(IOJob ioJob, boolean root) throws IOException {
@@ -109,6 +116,7 @@ public class IOThread implements Runnable {
                     NetworkInputIOJob ioj = (NetworkInputIOJob) ioJob;
                     processNetworkInput(ioJob.is, ioj.ina);
                     break;
+                case SIGN_OBJECT:
             }
             if (ioJob.next != null) {
                 processJob(ioJob.next, false);

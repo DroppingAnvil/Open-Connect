@@ -1,4 +1,4 @@
-package dev.droppinganvil.v3.network.nodemesh.events;
+package dev.droppinganvil.v3.network.events;
 
 public enum EventType {
     DICTIONARY_EDIT,

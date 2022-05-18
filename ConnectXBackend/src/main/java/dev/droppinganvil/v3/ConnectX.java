@@ -7,8 +7,11 @@ package dev.droppinganvil.v3;
 
 import dev.droppinganvil.v3.crypt.core.CryptProvider;
 import dev.droppinganvil.v3.crypt.pgpainless.PainlessCryptProvider;
+import dev.droppinganvil.v3.exceptions.UnsafeKeywordException;
 import dev.droppinganvil.v3.io.IOJob;
-import dev.droppinganvil.v3.network.nodemesh.CXNetwork;
+import dev.droppinganvil.v3.io.strings.JacksonProvider;
+import dev.droppinganvil.v3.io.strings.SerializationProvider;
+import dev.droppinganvil.v3.network.CXNetwork;
 import dev.droppinganvil.v3.network.nodemesh.Node;
 import dev.droppinganvil.v3.resourcecore.Availability;
 import dev.droppinganvil.v3.resourcecore.Resource;
@@ -16,8 +19,13 @@ import dev.droppinganvil.v3.resourcecore.ResourceType;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 import java.util.Queue;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class ConnectX {
@@ -28,6 +36,8 @@ public class ConnectX {
     public static File cxRoot = new File("ConnectX");
     private transient static CXNetwork cx;
     private static transient Node self;
+    private static final transient ConcurrentHashMap<String, SerializationProvider> serializationProviders = new ConcurrentHashMap<>();
+    private static transient List<String> blacklist = Arrays.asList("SYSTEM", "CX", "JSON-CX");
 
 
     public ConnectX() throws IOException {
@@ -43,27 +53,53 @@ public class ConnectX {
             platform = Platform.ConnectX;
         }
         if (platform == null) platform = Platform.Unknown;
+
+        serializationProviders.put("JSON-CX", new JacksonProvider());
+
         if (!cxRoot.exists()) {
             if (!cxRoot.mkdir()) throw new IOException();
             //TODO network join 
         }
     }
-
+    public static void checkBlacklist(String s) throws UnsafeKeywordException {
+        if (!blacklist.contains(s)) throw new UnsafeKeywordException();
+    }
+    public static void checkProvider(String method) {
+        if (!serializationProviders.containsKey(method)) throw new NullPointerException();
+    }
+    public static String serialize(String method, Object o) throws Exception {
+        checkProvider(method);
+        return serializationProviders.get(method).getString(o);
+    }
+    public static void serialize(String method, Object o, OutputStream os) throws Exception {
+        checkProvider(method);
+        serializationProviders.get(method).writeToStream(os, o);
+    }
+    public static Object deserialize(String method, String s, Class<?> clazz) throws Exception {
+        checkProvider(method);
+        return serializationProviders.get(method).getObject(s, clazz);
+    }
+    public static Object deserialize(String method, InputStream is, Class<?> clazz) throws Exception {
+        checkProvider(method);
+        return serializationProviders.get(method).getObject(is, clazz);
+    }
+    public static void addSerializationProvider(String name, SerializationProvider provider) throws UnsafeKeywordException, IllegalAccessException {
+        checkBlacklist(name);
+        if (serializationProviders.containsKey(name)) throw new IllegalAccessException();
+        serializationProviders.put(name, provider);
+    }
     public static String getOwnID() {
         return self.cxID;
     }
     public static String getOwnPublicKey() {
         return self.publicKey;
     }
-
     public void connect() {}
-
     public static boolean checkGlobalPermission(String deviceID, String permission) {
         assert cx != null;
         assert !deviceID.contains("SYSTEM");
         return cx.checkNetworkPermission(deviceID, permission);
     }
-
     public static File locateResourceDIR(Resource resource) {
         //TESTNET0.cxID.rrrrrrrrrrrrrrrrrrrrrrrr 25
         String[] spl = resource.resourceID.split("\\.");
@@ -73,18 +109,9 @@ public class ConnectX {
         if (!f.exists()) return null;
         return f;
     }
-
     public Resource locateResource(String networkID, ResourceType type, Availability availability) {
 
     }
 
-
-    /**
-     * Network interfaces
-     */
-
-    public void transmitMessage(String message, Node node) {
-
-    }
 
 }

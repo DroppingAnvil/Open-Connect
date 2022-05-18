@@ -3,7 +3,7 @@
  * All Rights Reserved
  */
 
-package dev.droppinganvil.v3.network.nodemesh.threads;
+package dev.droppinganvil.v3.network.threads;
 
 import dev.droppinganvil.v3.network.nodemesh.NodeConfig;
 import dev.droppinganvil.v3.network.nodemesh.NodeMesh;

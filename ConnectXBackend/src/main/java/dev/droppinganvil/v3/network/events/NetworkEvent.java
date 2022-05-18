@@ -1,4 +1,4 @@
-package dev.droppinganvil.v3.network.nodemesh.events;
+package dev.droppinganvil.v3.network.events;
 
 
 import dev.droppinganvil.v3.network.nodemesh.Node;
@@ -19,6 +19,10 @@ public class NetworkEvent implements Serializable {
      */
     public String target = "NETWORK";
     public String networkID;
+    /**
+     * Method for processing
+     */
+    public String m;
     /**
      * Event specific data
      */

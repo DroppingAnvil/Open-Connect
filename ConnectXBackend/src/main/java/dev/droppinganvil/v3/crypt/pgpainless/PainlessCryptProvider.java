@@ -65,6 +65,20 @@ public class PainlessCryptProvider extends CryptProvider {
         }
     }
     @Override
+    public void sign(InputStream is, OutputStream os) throws EncryptionFailureException {
+        try {
+            EncryptionStream encryptor = PGPainless.encryptAndOrSign()
+                    .onOutputStream(os)
+                    .withOptions(ProducerOptions.sign(new SigningOptions().addInlineSignature(protector, secretKey, DocumentSignatureType.CANONICAL_TEXT_DOCUMENT)
+                            ).setAsciiArmor(false)
+                    );
+        } catch (Exception e) {
+            EncryptionFailureException efe = new EncryptionFailureException();
+            efe.initCause(e);
+            throw efe;
+        }
+    }
+    @Override
     public Object decryptNetworked(InputStream is, OutputStream os, String deviceID) throws DecryptionFailureException {
         try {
             DecryptionStream decryptionStream = PGPainless.decryptAndOrVerify()

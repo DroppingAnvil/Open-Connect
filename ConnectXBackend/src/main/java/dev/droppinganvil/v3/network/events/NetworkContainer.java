@@ -1,6 +1,9 @@
-package dev.droppinganvil.v3.network.nodemesh;
+/*
+ * Copyright (c) 2022. Christopher Willett
+ * All Rights Reserved
+ */
 
-import dev.droppinganvil.v3.network.nodemesh.events.EventType;
+package dev.droppinganvil.v3.network.events;
 
 import java.io.Serializable;
 

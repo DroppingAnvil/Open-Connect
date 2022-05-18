@@ -9,7 +9,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.droppinganvil.v3.crypt.core.exceptions.DecryptionFailureException;
 import dev.droppinganvil.v3.edge.ConnectXAccount;
-import dev.droppinganvil.v3.network.nodemesh.events.NetworkEvent;
+import dev.droppinganvil.v3.network.events.NetworkEvent;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -30,6 +30,7 @@ public class InConnectionManager {
         synchronized (eventQueue) {
             NetworkEvent ne = eventQueue.poll();
             if (ne!=null) {
+                //TODO non constant handling
                 switch (ne.eventType) {
                     case AccountCreate:
                         ConnectXAccount cxc = (ConnectXAccount) processObject(mapper, ne);

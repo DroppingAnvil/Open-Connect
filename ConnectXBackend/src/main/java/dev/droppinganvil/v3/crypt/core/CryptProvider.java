@@ -26,6 +26,9 @@ public abstract class CryptProvider {
     public void encrypt(InputStream is, OutputStream os, Long publicKey) throws EncryptionFailureException {
 
     }
+    public void sign(InputStream is, OutputStream os) throws EncryptionFailureException {
+
+    }
     public void encryptCopyAndDeleteFile(File in, File outDir, Long publicKey) throws IOException, EncryptionFailureException {
         if (!in.exists() || IPXFileUtils.checkBasicIORights(in)) throw new IOException();
             String name = in.getName();

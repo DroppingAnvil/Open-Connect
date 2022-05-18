@@ -8,7 +8,7 @@ package dev.droppinganvil.v3.resourcecore;
 import dev.droppinganvil.v3.ConnectX;
 import dev.droppinganvil.v3.Permission;
 import dev.droppinganvil.v3.State;
-import dev.droppinganvil.v3.network.nodemesh.CXNetwork;
+import dev.droppinganvil.v3.network.CXNetwork;
 import java.io.Serializable;
 import java.util.List;
 

@@ -3,7 +3,7 @@
  * All Rights Reserved
  */
 
-package dev.droppinganvil.v3.network.nodemesh;
+package dev.droppinganvil.v3.network;
 
 import dev.droppinganvil.v3.Configuration;
 import dev.droppinganvil.v3.ConnectX;

@@ -9,7 +9,7 @@ public class IOJob {
     public Boolean closeAfter;
     public JobType jt;
     /**
-     * Represents the success of the individual IO operation this job should undertake, will not become true on root object until all jobs and doAfter s have completed
+     * Represents the success of the IO operation this job should undertake, will not become true on root object until all jobs and doAfter s have completed
      */
     public boolean success;
     /**
@@ -17,6 +17,11 @@ public class IOJob {
      * Will be null unless set
      */
     public IOJob next;
+    /**
+     * For extra job specific data
+     */
+    public Object o;
+    public Object o1;
 
     public IOJob(InputStream is, OutputStream os, Boolean closeAfter) {
         this.is = is;
