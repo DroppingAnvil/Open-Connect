@@ -23,13 +23,22 @@ public abstract class CryptProvider {
     public String getPublicKey() {
         return null;
     }
-    public void encrypt(InputStream is, OutputStream os, Long publicKey) throws EncryptionFailureException {
+
+    /**
+     * @param is Signed input
+     * @param os Output stripped of all encryption meta
+     * @return Verification status (True being successful)
+     */
+    public boolean verifyAndStrip(InputStream is, OutputStream os, String cxID) throws DecryptionFailureException {
+        return false;
+    }
+    public void encrypt(InputStream is, OutputStream os, String cxID) throws EncryptionFailureException {
 
     }
     public void sign(InputStream is, OutputStream os) throws EncryptionFailureException {
 
     }
-    public void encryptCopyAndDeleteFile(File in, File outDir, Long publicKey) throws IOException, EncryptionFailureException {
+    public void encryptCopyAndDeleteFile(File in, File outDir, String cxID) throws IOException, EncryptionFailureException {
         if (!in.exists() || IPXFileUtils.checkBasicIORights(in)) throw new IOException();
             String name = in.getName();
             File destination = new File(outDir, name);
@@ -38,13 +47,13 @@ public abstract class CryptProvider {
             }
             FileInputStream input = new FileInputStream(in);
             FileOutputStream encryptedOutput = new FileOutputStream(destination);
-            encrypt(input, encryptedOutput, publicKey);
+            encrypt(input, encryptedOutput, cxID);
             if (!in.delete()) throw new IOException();
     }
-    public Object decryptNetworked(InputStream is, OutputStream os, String deviceID) throws DecryptionFailureException {
+    public Object decrypt(InputStream is, OutputStream os, String cxID, boolean tryImport) throws DecryptionFailureException {
         return null;
     }
-    public Boolean verify(String data, String networkDeviceID) throws DecryptionFailureException {
+    public Boolean verify(String data, String cxID) throws DecryptionFailureException {
         return false;
     }
     private File createTemp(String s) {
@@ -67,9 +76,10 @@ public abstract class CryptProvider {
         if (this.tempdir != null) throw new TempDirectorySolidified();
         tempdir = dir;
     }
-    public void setup(String id, String s, File dir) throws Exception {
+    public void setup(String cxID, String s, File dir) throws Exception {
 
     }
+    public boolean cacheCert(String cxID, boolean tryImport, boolean sync) {return false;}
     public void shutdown() {
 
     }

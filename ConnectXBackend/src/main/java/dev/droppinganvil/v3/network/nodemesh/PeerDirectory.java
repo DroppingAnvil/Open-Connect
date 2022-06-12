@@ -27,12 +27,14 @@ public class PeerDirectory implements Serializable {
         if (seen.containsKey(cxID)) return seen.get(cxID);
         if (allPeers.containsKey(cxID)) {
             char s = cxID.charAt(0);
-            if (peers == null) peers = new File(ConnectX.cxRoot, "peers");
+            if (peers == null) peers = new File(ConnectX.cxRoot, "nodemesh");
             File peerGroup = new File(peers, String.valueOf(s));
             if (peerGroup.exists()) {
                 File peer = new File(peerGroup, cxID);
                 if (peer.exists()) {
+                    if (sync) {
 
+                    }
                 }
             } else {
 

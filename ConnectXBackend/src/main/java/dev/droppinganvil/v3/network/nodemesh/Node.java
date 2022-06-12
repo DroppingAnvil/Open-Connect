@@ -21,6 +21,10 @@ public class Node implements Serializable {
      */
     public String publicKey;
     /**
+     * public key's ID
+     */
+    public Long keyID;
+    /**
      * Roles node provides
      */
     public List<String> roles;

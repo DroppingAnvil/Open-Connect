@@ -3,6 +3,8 @@ package dev.droppinganvil.v3.crypt.pgpainless;
 import dev.droppinganvil.v3.crypt.core.CryptProvider;
 import dev.droppinganvil.v3.crypt.core.exceptions.DecryptionFailureException;
 import dev.droppinganvil.v3.crypt.core.exceptions.EncryptionFailureException;
+import dev.droppinganvil.v3.network.nodemesh.Node;
+import dev.droppinganvil.v3.network.nodemesh.PeerDirectory;
 import org.bouncycastle.openpgp.*;
 import org.bouncycastle.util.io.Streams;
 import org.pgpainless.PGPainless;
@@ -18,8 +20,7 @@ import org.pgpainless.key.util.KeyRingUtils;
 import org.pgpainless.util.Passphrase;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class PainlessCryptProvider extends CryptProvider {
 
@@ -32,9 +33,9 @@ public class PainlessCryptProvider extends CryptProvider {
      */
     private static PGPSecretKeyRing secretKey;
     /**
-     * All network public keys
+     * Network public key cache
      */
-    public static PGPPublicKeyRingCollection publicKeys;
+    public static ConcurrentHashMap<String, PGPPublicKeyRing> certCache = new ConcurrentHashMap<>();
     /**
      * On board public key
      */
@@ -43,16 +44,38 @@ public class PainlessCryptProvider extends CryptProvider {
      * NMI Public key
      */
     public PGPPublicKeyRing nmipubkey;
-    private SecretKeyRingProtector protector = SecretKeyRingProtector.unprotectedKeys();
-
+    private final SecretKeyRingProtector protector = SecretKeyRingProtector.unprotectedKeys();
     @Override
-    public void encrypt(InputStream is, OutputStream os, Long publicKeyL) throws EncryptionFailureException {
+    public boolean verifyAndStrip(InputStream is, OutputStream os, String cxID) throws DecryptionFailureException {
+        if (cacheCert(cxID, false, true)) {
+            try {
+                DecryptionStream decryptionStream = PGPainless.decryptAndOrVerify()
+                        .onInputStream(is)
+                        .withOptions(new ConsumerOptions()
+                                .addDecryptionKey(secretKey, protector)
+                                .addVerificationCert(certCache.get(cxID))
+                        );
+                Streams.pipeAll(decryptionStream, os);
+                decryptionStream.close();
+                return decryptionStream.getResult().isVerified();
+            } catch (Exception e) {
+                e.printStackTrace();
+                DecryptionFailureException dfe = new DecryptionFailureException();
+                dfe.initCause(e);
+                throw dfe;
+            }
+        }
+        return false;
+    }
+    @Override
+    public void encrypt(InputStream is, OutputStream os, String cxID) throws EncryptionFailureException {
+        if (!cacheCert(cxID, false, true)) throw new EncryptionFailureException();
         try {
             EncryptionStream encryptor = PGPainless.encryptAndOrSign()
                     .onOutputStream(os)
                     .withOptions(ProducerOptions.signAndEncrypt(
                             EncryptionOptions.encryptCommunications()
-                                    .addRecipient(publicKeys.getPublicKeyRing(publicKeyL))
+                                    .addRecipient(certCache.get(cxID))
                                     .addRecipient(publicKey),
                             new SigningOptions()
                                     .addInlineSignature(protector, secretKey, DocumentSignatureType.CANONICAL_TEXT_DOCUMENT)
@@ -79,13 +102,13 @@ public class PainlessCryptProvider extends CryptProvider {
         }
     }
     @Override
-    public Object decryptNetworked(InputStream is, OutputStream os, String deviceID) throws DecryptionFailureException {
+    public Object decrypt(InputStream is, OutputStream os, String cxID, boolean tryImport) throws DecryptionFailureException {
         try {
             DecryptionStream decryptionStream = PGPainless.decryptAndOrVerify()
                     .onInputStream(is)
                     .withOptions(new ConsumerOptions()
                             .addDecryptionKey(secretKey, protector)
-                            .addVerificationCerts(publicKeys)
+                            .addVerificationCert(certCache.get(certCache.get(cxID)))
                     );
             Streams.pipeAll(decryptionStream, os);
             decryptionStream.close();
@@ -98,7 +121,7 @@ public class PainlessCryptProvider extends CryptProvider {
         }
     }
     @Override
-    public void setup(String id, String s, File dir) throws Exception {
+    public void setup(String cxID, String s, File dir) throws Exception {
         File privateKeyFile = new File(dir, "key.cx");
         if (privateKeyFile.exists()) {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -109,7 +132,7 @@ public class PainlessCryptProvider extends CryptProvider {
             secretKey = PGPainless.readKeyRing().secretKeyRing(baos.toByteArray());
         } else {
             secretKey = PGPainless.generateKeyRing()
-                    .modernKeyRing(id, s);
+                    .modernKeyRing(cxID, s);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             FileOutputStream fos = new FileOutputStream(privateKeyFile);
             secretKey.encode(baos);
@@ -118,22 +141,30 @@ public class PainlessCryptProvider extends CryptProvider {
             Streams.pipeAll(new ByteArrayInputStream(baos.toByteArray()), es);
         }
         publicKey = KeyRingUtils.publicKeyRingFrom(secretKey);
-        File publicKeyFile = new File(dir, "publickeys.cx");
-        if (publicKeyFile.exists()) {
-            publicKeys = PGPainless.readKeyRing().publicKeyRingCollection(publicKeyFile.toURL().openStream());
-        } else {
-            List<PGPPublicKeyRing> empty = new ArrayList<>();
-            publicKeys = new PGPPublicKeyRingCollection(empty);
-        }
-        File nmipublicKeyFile = new File(dir, "nmi.asc");
+        File nmipublicKeyFile = new File(dir, "cx.asc");
         if (nmipublicKeyFile.exists()) {
             nmipubkey = PGPainless.readKeyRing().publicKeyRing(nmipublicKeyFile.toURL().openStream());
         } else {
             throw new IOException();
         }
-
-
         //load keys
         ready = true;
+    }
+    @Override
+    public boolean cacheCert(String cxID, boolean tryImport, boolean sync) {
+        if (certCache.containsKey(cxID)) return true;
+        try {
+            Node n = PeerDirectory.lookup(cxID, tryImport, sync);
+            if (n != null) {
+                PGPPublicKeyRing cert = PGPainless.readKeyRing().publicKeyRing(n.publicKey);
+                if (cert != null) {
+                    certCache.put(cxID, cert);
+                    return true;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

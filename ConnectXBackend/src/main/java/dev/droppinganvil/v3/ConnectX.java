@@ -31,7 +31,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class ConnectX {
     public static Platform platform;
     public State state = State.CXConnecting;
-    public CryptProvider encryptionProvider = new PainlessCryptProvider();
+    public static final CryptProvider encryptionProvider = new PainlessCryptProvider();
     public final Queue<IOJob> jobQueue = new ConcurrentLinkedQueue<>();
     public static File cxRoot = new File("ConnectX");
     private transient static CXNetwork cx;
@@ -55,11 +55,12 @@ public class ConnectX {
         if (platform == null) platform = Platform.Unknown;
 
         serializationProviders.put("JSON-CX", new JacksonProvider());
-
+        //Setup filesystem
         if (!cxRoot.exists()) {
             if (!cxRoot.mkdir()) throw new IOException();
-            //TODO network join 
+            new File(cxRoot, "nodemesh")
         }
+        //TODO network join
     }
     public static void checkSafety(String s) throws UnsafeKeywordException {
         //TODO filesystem safety
@@ -89,11 +90,17 @@ public class ConnectX {
         if (serializationProviders.containsKey(name)) throw new IllegalAccessException();
         serializationProviders.put(name, provider);
     }
+    public static Object getSignedObject(String cxID, InputStream is, Class<?> clazz) {
+
+    }
     public static String getOwnID() {
         return self.cxID;
     }
     public static String getOwnPublicKey() {
         return self.publicKey;
+    }
+    public static String getPublicKey(String cxID) {
+
     }
     public void connect() {}
     public static boolean checkGlobalPermission(String deviceID, String permission) {

@@ -11,7 +11,7 @@ import java.util.List;
 public class Configuration implements Serializable {
     public String SDF_FORMAT = "S-m-H-a-EEE-F-M-y";
     public String netID;
-    public String nmi_pub;
+    public String nmiPub;
     public List<String> backendSet;
     public Boolean active = true;
     public Boolean unlimitedUpload = false;
