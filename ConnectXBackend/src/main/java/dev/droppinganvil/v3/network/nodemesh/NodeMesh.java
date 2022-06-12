@@ -6,7 +6,8 @@ import java.io.File;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class NodeMesh {
-    public static ConcurrentHashMap<String, Node> nodeMap = new ConcurrentHashMap<>();
+    public static ConcurrentHashMap<String, Node> nodeCache = new ConcurrentHashMap<>();
+    public static PeerDirectory peers;
     private static ConcurrentHashMap<String, CXNetwork> networkMap = new ConcurrentHashMap<>();
     public static InConnectionManager in;
     public static OutConnectionManager out;

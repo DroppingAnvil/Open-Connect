@@ -10,8 +10,9 @@ import java.io.Serializable;
 /**
  * This data should not be E2E it must be P2P to work effectively
  */
-public class NetworkContainer implements Serializable {
+public class EventContainer implements Serializable {
     public String signedEvent;
     public EventType et;
+    public String cxID;
 
 }

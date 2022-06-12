@@ -11,7 +11,7 @@ public class Node implements Serializable {
     /**
      * Address for connection
      */
-    public List<String> isa;
+    public String isa;
     /**
      * Device's network account id
      */
@@ -23,7 +23,7 @@ public class Node implements Serializable {
     /**
      * Roles node provides
      */
-    public List<Role> roles;
+    public List<String> roles;
     /**
      * User defined non unique device name
      */

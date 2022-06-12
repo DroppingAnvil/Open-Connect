@@ -61,7 +61,8 @@ public class ConnectX {
             //TODO network join 
         }
     }
-    public static void checkBlacklist(String s) throws UnsafeKeywordException {
+    public static void checkSafety(String s) throws UnsafeKeywordException {
+        //TODO filesystem safety
         if (!blacklist.contains(s)) throw new UnsafeKeywordException();
     }
     public static void checkProvider(String method) {
@@ -84,7 +85,7 @@ public class ConnectX {
         return serializationProviders.get(method).getObject(is, clazz);
     }
     public static void addSerializationProvider(String name, SerializationProvider provider) throws UnsafeKeywordException, IllegalAccessException {
-        checkBlacklist(name);
+        checkSafety(name);
         if (serializationProviders.containsKey(name)) throw new IllegalAccessException();
         serializationProviders.put(name, provider);
     }
