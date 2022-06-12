@@ -5,6 +5,7 @@
 
 package dev.droppinganvil.v3;
 
+import dev.droppinganvil.v3.api.CXPlugin;
 import dev.droppinganvil.v3.crypt.core.CryptProvider;
 import dev.droppinganvil.v3.crypt.pgpainless.PainlessCryptProvider;
 import dev.droppinganvil.v3.exceptions.UnsafeKeywordException;
@@ -12,6 +13,7 @@ import dev.droppinganvil.v3.io.IOJob;
 import dev.droppinganvil.v3.io.strings.JacksonProvider;
 import dev.droppinganvil.v3.io.strings.SerializationProvider;
 import dev.droppinganvil.v3.network.CXNetwork;
+import dev.droppinganvil.v3.network.events.NetworkEvent;
 import dev.droppinganvil.v3.network.nodemesh.Node;
 import dev.droppinganvil.v3.resourcecore.Availability;
 import dev.droppinganvil.v3.resourcecore.Resource;
@@ -31,13 +33,15 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class ConnectX {
     public static Platform platform;
     public State state = State.CXConnecting;
+    private static ConcurrentHashMap<String, CXNetwork> networkMap = new ConcurrentHashMap<>();
     public static final CryptProvider encryptionProvider = new PainlessCryptProvider();
+    private static final transient ConcurrentHashMap<String, SerializationProvider> serializationProviders = new ConcurrentHashMap<>();
     public final Queue<IOJob> jobQueue = new ConcurrentLinkedQueue<>();
     public static File cxRoot = new File("ConnectX");
     private transient static CXNetwork cx;
     private static transient Node self;
-    private static final transient ConcurrentHashMap<String, SerializationProvider> serializationProviders = new ConcurrentHashMap<>();
-    private static transient List<String> blacklist = Arrays.asList("SYSTEM", "CX", "JSON-CX");
+    private static ConcurrentHashMap<String, CXPlugin> plugins = new ConcurrentHashMap<>();
+    private static transient List<String> reserved = Arrays.asList("SYSTEM", "CX", "cxJSON1");
 
 
     public ConnectX() throws IOException {
@@ -54,17 +58,19 @@ public class ConnectX {
         }
         if (platform == null) platform = Platform.Unknown;
 
-        serializationProviders.put("JSON-CX", new JacksonProvider());
+        serializationProviders.put("cxJSON1", new JacksonProvider());
+
         //Setup filesystem
         if (!cxRoot.exists()) {
             if (!cxRoot.mkdir()) throw new IOException();
-            new File(cxRoot, "nodemesh")
+            File nodemesh = new File(cxRoot, "nodemesh");
+            if (!nodemesh.exists()) if (!nodemesh.mkdir()) throw new IOException();
         }
         //TODO network join
     }
     public static void checkSafety(String s) throws UnsafeKeywordException {
         //TODO filesystem safety
-        if (!blacklist.contains(s)) throw new UnsafeKeywordException();
+        if (!reserved.contains(s)) throw new UnsafeKeywordException();
     }
     public static void checkProvider(String method) {
         if (!serializationProviders.containsKey(method)) throw new NullPointerException();
@@ -96,17 +102,11 @@ public class ConnectX {
     public static String getOwnID() {
         return self.cxID;
     }
-    public static String getOwnPublicKey() {
-        return self.publicKey;
-    }
-    public static String getPublicKey(String cxID) {
-
-    }
     public void connect() {}
-    public static boolean checkGlobalPermission(String deviceID, String permission) {
+    public static boolean checkGlobalPermission(String cxID, String permission) {
         assert cx != null;
-        assert !deviceID.contains("SYSTEM");
-        return cx.checkNetworkPermission(deviceID, permission);
+        assert !cxID.contains("SYSTEM");
+        return cx.checkNetworkPermission(cxID, permission);
     }
     public static File locateResourceDIR(Resource resource) {
         //TESTNET0.cxID.rrrrrrrrrrrrrrrrrrrrrrrr 25
@@ -119,6 +119,20 @@ public class ConnectX {
     }
     public Resource locateResource(String networkID, ResourceType type, Availability availability) {
 
+    }
+    public static boolean addPlugin(CXPlugin cxp) {
+        try {
+            checkSafety(cxp.serviceName);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (plugins.containsKey(cxp.serviceName)) return false;
+        plugins.put(cxp.serviceName, cxp);
+        return true;
+    }
+    public static boolean sendPluginEvent(NetworkEvent ne, String eventType) {
+        if (!plugins.containsKey(eventType)) return false;
+        return plugins.get(eventType).handleEvent(ne);
     }
 
 

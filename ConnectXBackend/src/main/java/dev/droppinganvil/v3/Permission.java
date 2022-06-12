@@ -10,5 +10,6 @@ public enum Permission {
     NetworkUpload,
     UploadGlobalResource,
     AddAccount,
+    Record,
 
 }

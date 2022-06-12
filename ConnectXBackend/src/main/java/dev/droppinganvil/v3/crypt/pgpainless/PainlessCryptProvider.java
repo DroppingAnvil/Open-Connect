@@ -121,6 +121,24 @@ public class PainlessCryptProvider extends CryptProvider {
         }
     }
     @Override
+    public Object decrypt(InputStream is, OutputStream os) throws DecryptionFailureException {
+        try {
+            DecryptionStream decryptionStream = PGPainless.decryptAndOrVerify()
+                    .onInputStream(is)
+                    .withOptions(new ConsumerOptions()
+                            .addDecryptionKey(secretKey, protector)
+                    );
+            Streams.pipeAll(decryptionStream, os);
+            decryptionStream.close();
+            return decryptionStream.getResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+            DecryptionFailureException dfe = new DecryptionFailureException();
+            dfe.initCause(e);
+            throw dfe;
+        }
+    }
+    @Override
     public void setup(String cxID, String s, File dir) throws Exception {
         File privateKeyFile = new File(dir, "key.cx");
         if (privateKeyFile.exists()) {

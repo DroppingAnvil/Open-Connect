@@ -2,8 +2,12 @@ package dev.droppinganvil.v3.io;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.droppinganvil.v3.ConnectX;
+import dev.droppinganvil.v3.analytics.AnalyticData;
+import dev.droppinganvil.v3.analytics.Analytics;
 import dev.droppinganvil.v3.crypt.core.exceptions.DecryptionFailureException;
 import dev.droppinganvil.v3.network.UnauthorizedNetworkConnectivityException;
+import dev.droppinganvil.v3.network.events.EventType;
+import dev.droppinganvil.v3.network.events.NetworkContainer;
 import dev.droppinganvil.v3.network.nodemesh.NodeConfig;
 import dev.droppinganvil.v3.network.nodemesh.NodeMesh;
 import dev.droppinganvil.v3.network.events.NetworkEvent;
@@ -59,7 +63,7 @@ public class IOThread implements Runnable {
     public static ByteArrayOutputStream reverse(InputStream is, Boolean closeAfter) throws IOException {
         //TODO
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        byte[] buffer = new byte[NodeConfig.IO_REVERSE_BYTE_BUFFER];
+        byte[] buffer = new byte[NodeConfig.ioReverseByteBuffer];
         while(is.read(buffer) > -1) {
             baos.write(buffer);
         }
@@ -68,7 +72,7 @@ public class IOThread implements Runnable {
     }
     public static void write(InputStream is, OutputStream os, Boolean closeAfter) throws IOException {
         //TODO
-        byte[] buffer = new byte[NodeConfig.IO_WRITE_BYTE_BUFFER];
+        byte[] buffer = new byte[NodeConfig.ioWriteByteBuffer];
         while(is.read(buffer) > -1) {
             os.write(buffer);
         }
@@ -80,16 +84,22 @@ public class IOThread implements Runnable {
     public void processNetworkInput(InputStream is, String inputAddress) throws IOException, DecryptionFailureException, ClassNotFoundException, UnauthorizedNetworkConnectivityException {
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        Object o = cx.encryptionProvider.decryptNetworked(is, baos, null);
-        if (o instanceof OpenPgpMetadata) {
-            OpenPgpMetadata opm = (OpenPgpMetadata) o;
-
-        }
+        Object o = cx.encryptionProvider.decrypt(is, baos);
         //TODO max size
-        String json = baos.toString("UTF-8");
-        NetworkEvent ne = mapper.convertValue(json, NetworkEvent.class);
+        String networkContainer = baos.toString("UTF-8");
+        NetworkContainer nc;
+        try {
+            nc = (NetworkContainer) ConnectX.deserialize("cxJSON1", networkContainer, NetworkContainer.class);
+            ConnectX.checkSafety(nc.cxID);
 
-
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (NodeMesh.timeout.containsKey(inputAddress)) {
+                NodeMesh.blacklist.put(inputAddress, "Protocol not respected");
+            } else {
+                NodeMesh.timeout.put(inputAddress, 1000);
+            }
+        }
         synchronized (NodeMesh.in.eventQueue) {
             NodeMesh.in.eventQueue.add(ne);
         }

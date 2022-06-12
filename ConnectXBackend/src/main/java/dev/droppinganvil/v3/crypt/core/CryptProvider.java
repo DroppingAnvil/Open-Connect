@@ -53,6 +53,9 @@ public abstract class CryptProvider {
     public Object decrypt(InputStream is, OutputStream os, String cxID, boolean tryImport) throws DecryptionFailureException {
         return null;
     }
+    public Object decrypt(InputStream is, OutputStream os) throws DecryptionFailureException {
+        return null;
+    }
     public Boolean verify(String data, String cxID) throws DecryptionFailureException {
         return false;
     }

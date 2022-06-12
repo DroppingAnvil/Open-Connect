@@ -10,6 +10,7 @@ public enum AnalyticData {
     CriticalError,
     SecurityEvent,
     NetworkError,
+    Tear,
     Stats,
 
 }

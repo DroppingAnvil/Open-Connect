@@ -8,18 +8,25 @@ package dev.droppinganvil.v3.network;
 import dev.droppinganvil.v3.Configuration;
 import dev.droppinganvil.v3.ConnectX;
 import dev.droppinganvil.v3.State;
-import dev.droppinganvil.v3.edge.NetworkLedger;
-import dev.droppinganvil.v3.network.NetworkDictionary;
+import dev.droppinganvil.v3.edge.NetworkRecord;
 import us.anvildevelopment.v1.util1.permissions.BasicPermissionContainer;
-
-import java.util.Enumeration;
 
 public class CXNetwork {
     public State networkState = State.ConnectNetworks;
     public Configuration configuration;
     public NetworkDictionary networkDictionary;
-    public NetworkLedger c1;
-    public NetworkLedger c2;
+    /**
+     * Administrative
+     */
+    public NetworkRecord c1;
+    /**
+     * Resources
+     */
+    public NetworkRecord c2;
+    /**
+     * Standard Events
+     */
+    public NetworkRecord c3;
     public BasicPermissionContainer networkPermissions;
 
     public boolean checkChainPermission(String deviceID, String permission, Long chainID) {

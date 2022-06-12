@@ -8,12 +8,12 @@ import java.io.Serializable;
 public class NetworkEvent implements Serializable {
 
     public NetworkEvent(EventType type, byte[] data, Node destination) {
-        this.eventType = type;
+        this.eventType = type.name();
         this.data = data;
 
     }
 
-    public EventType eventType;
+    public String eventType;
     /**
      * Nodes that should process event. "NETWORK" targets all nodes
      */
@@ -27,12 +27,4 @@ public class NetworkEvent implements Serializable {
      * Event specific data
      */
     public byte[] data;
-    /**
-     * cxID of transmission sender. Must be set
-     */
-    public String NID = "UNKNOWN";
-    /**
-     * NID of network event initiator. Must be set
-     */
-    public String NEI = "UNKNOWN";
 }
