@@ -44,7 +44,7 @@ public class InConnectionManager {
                 if (!NodeConfig.supportUnavailableServices) {
                     return;
                 } else {
-                    recordEvent(ib.ne);
+                    ConnectX.recordEvent(ib.ne);
                 }
             }
             if (ib!=null) {
@@ -56,10 +56,6 @@ public class InConnectionManager {
                 }
             }
         }
-    }
-    public boolean recordEvent(NetworkEvent ne) {
-        if (ne.target.equalsIgnoreCase("cx"))
-        NodeMesh.
     }
     public static Object processObject(ObjectMapper mapper, InputBundle input) throws JsonProcessingException, DecryptionFailureException, UnsupportedEncodingException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();

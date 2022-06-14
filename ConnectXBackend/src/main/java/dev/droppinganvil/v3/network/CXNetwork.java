@@ -9,6 +9,7 @@ import dev.droppinganvil.v3.Configuration;
 import dev.droppinganvil.v3.ConnectX;
 import dev.droppinganvil.v3.State;
 import dev.droppinganvil.v3.edge.NetworkRecord;
+import dev.droppinganvil.v3.network.events.NetworkEvent;
 import us.anvildevelopment.v1.util1.permissions.BasicPermissionContainer;
 
 public class CXNetwork {

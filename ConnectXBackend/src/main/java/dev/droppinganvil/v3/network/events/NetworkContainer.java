@@ -13,6 +13,10 @@ import java.io.Serializable;
 public class NetworkContainer implements Serializable {
     public String signedEvent;
     public String serialization;
+    /**
+     * Could be very useful but also insecure
+     */
+    @Deprecated
     public String cxID;
 
 }

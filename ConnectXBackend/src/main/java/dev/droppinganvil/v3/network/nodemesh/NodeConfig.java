@@ -10,6 +10,7 @@ public class NodeConfig {
      * Handles network input
      */
     public static Integer iThreads = 2;
+    public static Integer pThreads = 10;
     /**
      * Handles IO (Crypt)
      */

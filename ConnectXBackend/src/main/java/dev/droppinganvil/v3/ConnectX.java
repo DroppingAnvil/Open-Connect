@@ -15,6 +15,7 @@ import dev.droppinganvil.v3.io.strings.SerializationProvider;
 import dev.droppinganvil.v3.network.CXNetwork;
 import dev.droppinganvil.v3.network.events.NetworkEvent;
 import dev.droppinganvil.v3.network.nodemesh.Node;
+import dev.droppinganvil.v3.network.nodemesh.NodeMesh;
 import dev.droppinganvil.v3.resourcecore.Availability;
 import dev.droppinganvil.v3.resourcecore.Resource;
 import dev.droppinganvil.v3.resourcecore.ResourceType;
@@ -75,6 +76,9 @@ public class ConnectX {
     public static void checkProvider(String method) {
         if (!serializationProviders.containsKey(method)) throw new NullPointerException();
     }
+    public static boolean isProviderPresent(String method) {
+        return serializationProviders.containsKey(method);
+    }
     public static String serialize(String method, Object o) throws Exception {
         checkProvider(method);
         return serializationProviders.get(method).getString(o);
@@ -133,6 +137,11 @@ public class ConnectX {
     public static boolean sendPluginEvent(NetworkEvent ne, String eventType) {
         if (!plugins.containsKey(eventType)) return false;
         return plugins.get(eventType).handleEvent(ne);
+    }
+    public static boolean recordEvent(NetworkEvent ne) {
+        if (ne.target.equalsIgnoreCase("cx")) {
+
+        }
     }
 
 

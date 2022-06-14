@@ -15,6 +15,7 @@ import dev.droppinganvil.v3.utils.obj.BaseStatus;
 import org.pgpainless.decryption_verification.OpenPgpMetadata;
 
 import java.io.*;
+import java.net.Socket;
 
 public class IOThread implements Runnable {
     private static ObjectMapper mapper = new ObjectMapper();
@@ -81,24 +82,36 @@ public class IOThread implements Runnable {
             os.close();
         }
     }
-    public void processNetworkInput(InputStream is, String inputAddress) throws IOException, DecryptionFailureException, ClassNotFoundException, UnauthorizedNetworkConnectivityException {
-
+    public void processNetworkInput(InputStream is, Socket socket) throws IOException, DecryptionFailureException, ClassNotFoundException, UnauthorizedNetworkConnectivityException {
+        //TODO optimize streams
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        Object o = cx.encryptionProvider.decrypt(is, baos);
         //TODO max size
-        String networkContainer = baos.toString("UTF-8");
         NetworkContainer nc;
+        NetworkEvent ne;
+        ByteArrayOutputStream baoss = new ByteArrayOutputStream();
+        ByteArrayInputStream bais;
+        String networkEvent = "";
+
+        Object o = ConnectX.encryptionProvider.decrypt(is, baos);
+        String networkContainer = baos.toString("UTF-8");
         try {
             nc = (NetworkContainer) ConnectX.deserialize("cxJSON1", networkContainer, NetworkContainer.class);
-            ConnectX.checkSafety(nc.cxID);
-
+            if (nc.cxID != null) ConnectX.checkSafety(nc.cxID);
+            if (!ConnectX.isProviderPresent(nc.serialization)) {
+                socket.close();
+                Analytics.addData(AnalyticData.Tear, "Unsupported serialization method "+nc.serialization);
+                return;
+            }
+            Object o1 = ConnectX.encryptionProvider.decrypt()
+            ne = ConnectX.deserialize(nc.serialization, )
         } catch (Exception e) {
             e.printStackTrace();
-            if (NodeMesh.timeout.containsKey(inputAddress)) {
-                NodeMesh.blacklist.put(inputAddress, "Protocol not respected");
+            if (NodeMesh.timeout.containsKey(socket.getInetAddress().getHostAddress())) {
+                NodeMesh.blacklist.put(socket.getInetAddress().getHostAddress(), "Protocol not respected");
             } else {
-                NodeMesh.timeout.put(inputAddress, 1000);
+                NodeMesh.timeout.put(socket.getInetAddress().getHostAddress(), 1000);
             }
+            socket.close();
         }
         synchronized (NodeMesh.in.eventQueue) {
             NodeMesh.in.eventQueue.add(ne);

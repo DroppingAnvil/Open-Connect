@@ -10,6 +10,7 @@ import dev.droppinganvil.v3.io.IOThread;
 import dev.droppinganvil.v3.io.NetworkInputIOJob;
 import dev.droppinganvil.v3.network.nodemesh.InConnectionManager;
 import dev.droppinganvil.v3.network.nodemesh.NodeConfig;
+import dev.droppinganvil.v3.network.nodemesh.NodeMesh;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -27,9 +28,13 @@ public class SocketWatcher implements Runnable {
             try {
                 Socket s = InConnectionManager.serverSocket.accept();
                 if (s != null) {
-                    NetworkInputIOJob ni = new NetworkInputIOJob(s.getInputStream(), s.getInetAddress().getHostAddress());
-                    synchronized (cx.jobQueue) {
-                        cx.jobQueue.add(ni);
+                    if (!NodeMesh.blacklist.containsKey(s.getInetAddress().getHostAddress()) & !NodeMesh.timeout.containsKey(s.getInetAddress().getHostAddress())) {
+                        NetworkInputIOJob ni = new NetworkInputIOJob(s.getInputStream(), s.getInetAddress().getHostAddress());
+                        synchronized (cx.jobQueue) {
+                            cx.jobQueue.add(ni);
+                        }
+                    } else {
+                        s.close();
                     }
                 }
                 Thread.sleep(NodeConfig.ioSocketSleep);
