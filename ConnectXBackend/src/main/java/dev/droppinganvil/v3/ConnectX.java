@@ -13,6 +13,7 @@ import dev.droppinganvil.v3.io.IOJob;
 import dev.droppinganvil.v3.io.strings.JacksonProvider;
 import dev.droppinganvil.v3.io.strings.SerializationProvider;
 import dev.droppinganvil.v3.network.CXNetwork;
+import dev.droppinganvil.v3.network.InputBundle;
 import dev.droppinganvil.v3.network.events.NetworkEvent;
 import dev.droppinganvil.v3.network.nodemesh.Node;
 import dev.droppinganvil.v3.network.nodemesh.NodeMesh;
@@ -38,6 +39,7 @@ public class ConnectX {
     public static final CryptProvider encryptionProvider = new PainlessCryptProvider();
     private static final transient ConcurrentHashMap<String, SerializationProvider> serializationProviders = new ConcurrentHashMap<>();
     public final Queue<IOJob> jobQueue = new ConcurrentLinkedQueue<>();
+    public static final Queue<InputBundle> eventQueue = new ConcurrentLinkedQueue<>();
     public static File cxRoot = new File("ConnectX");
     private transient static CXNetwork cx;
     private static transient Node self;

@@ -30,4 +30,5 @@ public class NodeConfig {
     public static Integer IO_MAX_INPUT = 10000000;
     public static boolean autoUpdate = true;
     public static boolean supportUnavailableServices = false;
+    public static boolean devMode = false;
 }

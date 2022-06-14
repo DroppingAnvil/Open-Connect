@@ -32,4 +32,8 @@ public class Node implements Serializable {
      * User defined non unique device name
      */
     public String nicename;
+    /**
+     * For future use RESERVED
+     */
+    public String pr;
 }

@@ -20,10 +20,6 @@ public class ConnectXAccount implements Serializable {
      */
     public String networkAccountID;
     /**
-     * For future use, should be a JSON product package signed by NMI or NAS
-     */
-    public String productPackage;
-    /**
      * Device's public key
      */
     public String publicKey;

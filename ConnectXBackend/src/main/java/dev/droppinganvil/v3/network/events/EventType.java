@@ -1,15 +1,15 @@
 package dev.droppinganvil.v3.network.events;
 
 public enum EventType {
-    DICTIONARY_EDIT,
+    DICTIONARYEDIT,
     /**
      * Resource common to all nodes has been updated
      */
-    GLOBAL_RESOURCE_UPDATE,
+    GLOBALRESOURCEUPDATE,
     /**
      * device joined cx network
      */
-    AccountCreate,
+    NewNode,
     ResourceModification,
     /**
      * Schedules a network restart
@@ -18,7 +18,7 @@ public enum EventType {
     /**
      * Used when transmitting initial data
      */
-    HELLO_WORLD,
+    HELLOWORLD,
     /**
      * Internal Messaging
      */

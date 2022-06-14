@@ -5,6 +5,7 @@ import dev.droppinganvil.v3.ConnectX;
 import dev.droppinganvil.v3.analytics.AnalyticData;
 import dev.droppinganvil.v3.analytics.Analytics;
 import dev.droppinganvil.v3.crypt.core.exceptions.DecryptionFailureException;
+import dev.droppinganvil.v3.network.InputBundle;
 import dev.droppinganvil.v3.network.UnauthorizedNetworkConnectivityException;
 import dev.droppinganvil.v3.network.events.EventType;
 import dev.droppinganvil.v3.network.events.NetworkContainer;
@@ -82,41 +83,6 @@ public class IOThread implements Runnable {
             os.close();
         }
     }
-    public void processNetworkInput(InputStream is, Socket socket) throws IOException, DecryptionFailureException, ClassNotFoundException, UnauthorizedNetworkConnectivityException {
-        //TODO optimize streams
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        //TODO max size
-        NetworkContainer nc;
-        NetworkEvent ne;
-        ByteArrayOutputStream baoss = new ByteArrayOutputStream();
-        ByteArrayInputStream bais;
-        String networkEvent = "";
-
-        Object o = ConnectX.encryptionProvider.decrypt(is, baos);
-        String networkContainer = baos.toString("UTF-8");
-        try {
-            nc = (NetworkContainer) ConnectX.deserialize("cxJSON1", networkContainer, NetworkContainer.class);
-            if (nc.cxID != null) ConnectX.checkSafety(nc.cxID);
-            if (!ConnectX.isProviderPresent(nc.serialization)) {
-                socket.close();
-                Analytics.addData(AnalyticData.Tear, "Unsupported serialization method "+nc.serialization);
-                return;
-            }
-            Object o1 = ConnectX.encryptionProvider.decrypt()
-            ne = ConnectX.deserialize(nc.serialization, )
-        } catch (Exception e) {
-            e.printStackTrace();
-            if (NodeMesh.timeout.containsKey(socket.getInetAddress().getHostAddress())) {
-                NodeMesh.blacklist.put(socket.getInetAddress().getHostAddress(), "Protocol not respected");
-            } else {
-                NodeMesh.timeout.put(socket.getInetAddress().getHostAddress(), 1000);
-            }
-            socket.close();
-        }
-        synchronized (NodeMesh.in.eventQueue) {
-            NodeMesh.in.eventQueue.add(ne);
-        }
-    }
     public void signObject(IOJob ioJob) throws Exception {
         if (ioJob.is == null) {
             OutputStream oss = new ByteArrayOutputStream();
@@ -133,11 +99,11 @@ public class IOThread implements Runnable {
                     write(ioJob.is, ioJob.os, ioJob.closeAfter);
                     break;
                 case REVERSE:
-                    ioJob.os = reverse(ioJob.is, ioJob.closeAfter);
+                    reverse(ioJob.is, ioJob.closeAfter);
                     break;
                 case NETWORK_READ:
                     NetworkInputIOJob ioj = (NetworkInputIOJob) ioJob;
-                    processNetworkInput(ioJob.is, ioj.ina);
+                    NodeMesh.processNetworkInput(ioJob.is, ioj.s);
                     break;
                 case SIGN_OBJECT:
             }

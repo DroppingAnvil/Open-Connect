@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 public class NetworkEvent implements Serializable {
 
-    public NetworkEvent(EventType type, byte[] data, Node destination) {
+    public NetworkEvent(EventType type, byte[] data) {
         this.eventType = type.name();
         this.data = data;
 
@@ -15,10 +15,10 @@ public class NetworkEvent implements Serializable {
 
     public String eventType;
     /**
-     * Nodes that should process event. "NETWORK" targets all nodes
+     * Nodes that should process event. "CXNET" targets all nodes
      */
     public String target = "NETWORK";
-    public String networkID;
+    public String cxID;
     /**
      * Method for processing
      */

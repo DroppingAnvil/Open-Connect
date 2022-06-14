@@ -11,5 +11,6 @@ public enum Permission {
     UploadGlobalResource,
     AddAccount,
     Record,
+    Transmit,
 
 }

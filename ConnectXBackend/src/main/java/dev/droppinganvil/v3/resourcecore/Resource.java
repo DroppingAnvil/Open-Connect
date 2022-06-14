@@ -19,6 +19,7 @@ public class Resource implements Serializable {
     public String resourceLocation;
     public List<String> locations;
     public String hash;
+    public Object resource;
 
     public Resource publish(CXNetwork cxnet, ResourceType type, Availability availability, String hash, String resourceLocation, Object o) throws IllegalAccessException {
         assert locations == null;
