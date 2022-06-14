@@ -4,7 +4,6 @@ import dev.droppinganvil.v3.ConnectX;
 import dev.droppinganvil.v3.analytics.AnalyticData;
 import dev.droppinganvil.v3.analytics.Analytics;
 import dev.droppinganvil.v3.crypt.core.exceptions.DecryptionFailureException;
-import dev.droppinganvil.v3.edge.ConnectXAccount;
 import dev.droppinganvil.v3.network.CXNetwork;
 import dev.droppinganvil.v3.network.InputBundle;
 import dev.droppinganvil.v3.network.UnauthorizedNetworkConnectivityException;
@@ -101,9 +100,18 @@ public class NodeMesh {
             if (ib!=null) {
                 //TODO non constant handling
                 switch (et) {
-                    case AccountCreate:
-                        ConnectXAccount cxc = (ConnectXAccount) processObject(mapper, ne);
-
+                    case NewNode:
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        ByteArrayInputStream bais = new ByteArrayInputStream(ib.nc.event);
+                        Object o = ConnectX.encryptionProvider.decrypt(bais, baos);
+                        Node node = ConnectX.deserialize("cxJSON1", baos.toString("UTF-8"), Node.class);
+                        Node node1 = PeerDirectory.lookup(node.cxID, true, true);
+                        if (node1 != null) {
+                            ConnectX.encryptionProvider.cacheCert(node1.cxID, true, false);
+                            return;
+                        }
+                        PeerDirectory.addNode(node);
+                        break;
                 }
             }
         }

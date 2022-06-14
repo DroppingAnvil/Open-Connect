@@ -5,7 +5,6 @@
 
 package dev.droppinganvil.v3;
 
-import dev.droppinganvil.v3.edge.ConnectXAccount;
 import javafx.application.Application;
 import javafx.stage.Stage;
 

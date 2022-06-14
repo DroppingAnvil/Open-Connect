@@ -36,4 +36,11 @@ public class Node implements Serializable {
      * For future use RESERVED
      */
     public String pr;
+
+    public static boolean validate(Node node) {
+        assert node.cxID != null;
+        if (node.cxID.length() > 36) return false;
+        assert node.publicKey != null;
+        return true;
+    }
 }

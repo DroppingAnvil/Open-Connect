@@ -7,6 +7,7 @@ package dev.droppinganvil.v3;
 
 import dev.droppinganvil.v3.api.CXPlugin;
 import dev.droppinganvil.v3.crypt.core.CryptProvider;
+import dev.droppinganvil.v3.crypt.core.exceptions.DecryptionFailureException;
 import dev.droppinganvil.v3.crypt.pgpainless.PainlessCryptProvider;
 import dev.droppinganvil.v3.exceptions.UnsafeKeywordException;
 import dev.droppinganvil.v3.io.IOJob;
@@ -21,10 +22,7 @@ import dev.droppinganvil.v3.resourcecore.Availability;
 import dev.droppinganvil.v3.resourcecore.Resource;
 import dev.droppinganvil.v3.resourcecore.ResourceType;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -102,8 +100,12 @@ public class ConnectX {
         if (serializationProviders.containsKey(name)) throw new IllegalAccessException();
         serializationProviders.put(name, provider);
     }
-    public static Object getSignedObject(String cxID, InputStream is, Class<?> clazz) {
-
+    public static Object getSignedObject(String cxID, InputStream is, Class<?> clazz, String method) throws Exception {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        if (ConnectX.encryptionProvider.verifyAndStrip(is, baos, cxID)) {
+            return deserialize(method, baos.toString("UTF-8"), clazz);
+        }
+        return null;
     }
     public static String getOwnID() {
         return self.cxID;
