@@ -24,6 +24,7 @@ public class NodeMesh {
     public static ConcurrentHashMap<String, String> blacklist = new ConcurrentHashMap<>();
     public static PeerDirectory peers;
     public static InConnectionManager in;
+    public static Connections connections = new Connections();
     public static ThreadPoolExecutor threadPool = (ThreadPoolExecutor) Executors.newFixedThreadPool(NodeConfig.pThreads);
     //Initial object must be signed by initiator
     //If it is a global resource encrypting for only the next recipient node is acceptable
@@ -114,6 +115,16 @@ public class NodeMesh {
                         break;
                 }
             }
+        }
+    }
+    public static boolean fireEvent(NetworkEvent ne) {
+        if (ne.target.equalsIgnoreCase("CXN")) {
+            for (Node n : PeerDirectory.hv.values()) {
+                if
+            }
+        }
+        if (ne.eventType.equalsIgnoreCase(EventType.PeerFinding.name())) {
+
         }
     }
     public boolean connectNetwork(CXNetwork cxnet) {

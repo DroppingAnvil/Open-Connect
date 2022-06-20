@@ -13,14 +13,15 @@ import java.io.Serializable;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class PeerDirectory implements Serializable {
-    /**
-     * String cxID, String resourceID
-     */
     public static ConcurrentHashMap<String,Node> peerCache;
     public static ConcurrentHashMap<String,Node> seen;
+    public static ConcurrentHashMap<String, Node> lan;
     public static ConcurrentHashMap<String,Node> hv;
     public static File peers;
 
+
+    //TODO
+    //Writing node lookup and create account implementation, next up create peer finding event
     public static Node lookup(String cxID, boolean tryImport, boolean sync) throws UnsafeKeywordException {
         ConnectX.checkSafety(cxID);
         if (hv.containsKey(cxID)) return hv.get(cxID);
@@ -41,7 +42,7 @@ public class PeerDirectory implements Serializable {
                         //TODO async
                   //  }
                 }
-            } else if (tryImport) {
+            } else if (tryImport & sync) {
 
             }
 
@@ -53,5 +54,9 @@ public class PeerDirectory implements Serializable {
         } else {
             throw new IllegalStateException();
         }
+    }
+
+    public static boolean stableConnection() {
+        return true;
     }
 }

@@ -12,11 +12,11 @@ import java.io.Serializable;
  */
 public class NetworkContainer implements Serializable {
     public byte[] event;
-    public String serialization;
+    public String serialization = "cxJSON1";
     /**
-     * Higher security mode
+     * Higher security mode - Not implemented, do not use
      */
-    public boolean s;
+    public boolean s = false;
     /**
      * Will be null if s = true
      */

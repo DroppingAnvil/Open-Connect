@@ -18,11 +18,13 @@ import dev.droppinganvil.v3.network.InputBundle;
 import dev.droppinganvil.v3.network.events.NetworkEvent;
 import dev.droppinganvil.v3.network.nodemesh.Node;
 import dev.droppinganvil.v3.network.nodemesh.NodeMesh;
+import dev.droppinganvil.v3.network.nodemesh.OutputBundle;
 import dev.droppinganvil.v3.resourcecore.Availability;
 import dev.droppinganvil.v3.resourcecore.Resource;
 import dev.droppinganvil.v3.resourcecore.ResourceType;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -38,6 +40,7 @@ public class ConnectX {
     private static final transient ConcurrentHashMap<String, SerializationProvider> serializationProviders = new ConcurrentHashMap<>();
     public final Queue<IOJob> jobQueue = new ConcurrentLinkedQueue<>();
     public static final Queue<InputBundle> eventQueue = new ConcurrentLinkedQueue<>();
+    public static final Queue<OutputBundle> outputQueue = new ConcurrentLinkedQueue<>();
     public static File cxRoot = new File("ConnectX");
     private transient static CXNetwork cx;
     private static transient Node self;
@@ -107,6 +110,14 @@ public class ConnectX {
         }
         return null;
     }
+    public static ByteArrayOutputStream signObject(Object o, Class<?> clazz, String method) throws Exception {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        String s = serialize(method, o);
+        ByteArrayInputStream bais = new ByteArrayInputStream(s.getBytes(StandardCharsets.UTF_8));
+        ConnectX.encryptionProvider.sign(bais, baos);
+        bais.close();
+        return baos;
+    }
     public static String getOwnID() {
         return self.cxID;
     }
@@ -146,6 +157,11 @@ public class ConnectX {
         if (ne.target.equalsIgnoreCase("cx")) {
 
         }
+    }
+
+    public static CXNetwork getNetwork(String networkID) {
+        if (!networkMap.containsKey(networkID)) return null;
+        return networkMap.get(networkID);
     }
 
 

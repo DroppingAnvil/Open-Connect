@@ -23,5 +23,6 @@ public enum EventType {
      * Internal Messaging
      */
     MESSAGE,
+    PeerFinding,
     ;
 }

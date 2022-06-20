@@ -7,11 +7,11 @@ public class Node implements Serializable {
     /**
      * HTTP URL for connection
      */
-    public String url;
+    public String path;
     /**
      * Address for connection
      */
-    public String isa;
+    public String addr;
     /**
      * Device's network account id
      */
