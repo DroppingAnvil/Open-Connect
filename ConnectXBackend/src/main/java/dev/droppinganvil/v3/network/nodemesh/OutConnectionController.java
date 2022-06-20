@@ -1,6 +1,7 @@
 package dev.droppinganvil.v3.network.nodemesh;
 
 import dev.droppinganvil.v3.ConnectX;
+import dev.droppinganvil.v3.network.CXNetwork;
 import dev.droppinganvil.v3.network.events.NetworkContainer;
 import dev.droppinganvil.v3.network.events.NetworkEvent;
 
@@ -46,7 +47,35 @@ public class OutConnectionController {
                     continue;
                 }
             }
+        } else {
+            String[] path = out.ne.target.split(":");
+            if (path[0].equalsIgnoreCase("CXI")) {
+                Node n;
+                if (PeerDirectory.lan.containsKey(path[1])) {
+                    n = PeerDirectory.lan.get(path[1]);
+                } else {
+                    n = PeerDirectory.lookup(path[1], true, true);
+                }
+                String[] addr = n.addr.split(":");
+                Socket s = new Socket(addr[0], Integer.parseInt(addr[1]));
+                s.getOutputStream().write(cryptNetworkContainer);
+                s.close();
+                return;
+            }
+            if (path[0].equalsIgnoreCase("CXN")) {
+                CXNetwork cxn = ConnectX.getNetwork(path[1]);
+                if (cxn != null) {
+                    for (String s : cxn.configuration.backendSet) {
+                        Node n = PeerDirectory.lookup(s, true, true);
+                        String[] addr = n.addr.split(":");
+                        Socket so = new Socket(addr[0], Integer.parseInt(addr[1]));
+                        so.getOutputStream().write(cryptNetworkContainer);
+                        so.close();
+                    }
+                }
+            }
         }
+
 
     }
 

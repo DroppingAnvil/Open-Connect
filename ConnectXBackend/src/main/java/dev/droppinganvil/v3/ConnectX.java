@@ -19,6 +19,7 @@ import dev.droppinganvil.v3.network.events.NetworkEvent;
 import dev.droppinganvil.v3.network.nodemesh.Node;
 import dev.droppinganvil.v3.network.nodemesh.NodeMesh;
 import dev.droppinganvil.v3.network.nodemesh.OutputBundle;
+import dev.droppinganvil.v3.network.nodemesh.PeerDirectory;
 import dev.droppinganvil.v3.resourcecore.Availability;
 import dev.droppinganvil.v3.resourcecore.Resource;
 import dev.droppinganvil.v3.resourcecore.ResourceType;
@@ -162,6 +163,17 @@ public class ConnectX {
     public static CXNetwork getNetwork(String networkID) {
         if (!networkMap.containsKey(networkID)) return null;
         return networkMap.get(networkID);
+    }
+
+    public static void loadLan() {
+        File lan = new File(cxRoot, "lan");
+        if (!lan.exists()) lan.mkdir();
+        for (File f : lan.listFiles()) {
+            if (f.getName().contains(".cxi")) {
+                Node n = getSignedObject(getOwnID(), f.toURL().openStream(), Node.class, "cxJSON1");
+                PeerDirectory.lan.put(n.cxID, n);
+            }
+        }
     }
 
 

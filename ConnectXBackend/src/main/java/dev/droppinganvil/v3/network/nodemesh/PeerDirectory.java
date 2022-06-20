@@ -31,7 +31,7 @@ public class PeerDirectory implements Serializable {
             if (peers == null) peers = new File(ConnectX.cxRoot, "nodemesh");
             File peerGroup = new File(peers, String.valueOf(s));
             if (peerGroup.exists()) {
-                File peer = new File(peerGroup, cxID);
+                File peer = new File(peerGroup, cxID+".cxi");
                 if (peer.exists()) {
                     //if (sync) {
                         Node node = ConnectX.getSignedObject(cxID, peer.toURL().openStream(), Node.class, "cxJSON1");

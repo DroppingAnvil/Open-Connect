@@ -1,2 +1,4 @@
 paths
  CXR
+ CXI
+    blacklist : char. cxid netowrks
