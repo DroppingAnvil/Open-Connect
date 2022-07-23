@@ -51,7 +51,7 @@ public class OutConnectionController {
             }
         } else {
             String[] path = out.ne.target.split(":");
-            if (path[0].equalsIgnoreCase("CXI")) {
+            if (path[0].equalsIgnoreCase("CXS")) {
                 Node n;
                 if (PeerDirectory.lan.containsKey(path[1])) {
                     n = PeerDirectory.lan.get(path[1]);

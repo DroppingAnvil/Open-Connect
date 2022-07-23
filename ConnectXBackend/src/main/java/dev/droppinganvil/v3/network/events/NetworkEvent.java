@@ -14,10 +14,7 @@ public class NetworkEvent implements Serializable {
     }
 
     public String eventType;
-    /**
-     * Nodes that should process event. "CXNET" targets all nodes
-     */
-    public String target = "NETWORK";
+    public
     public String cxID;
     /**
      * Method for processing

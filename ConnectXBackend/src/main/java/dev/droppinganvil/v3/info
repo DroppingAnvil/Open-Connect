@@ -1,4 +1,10 @@
 paths
- CXR
- CXI
+
+ CX global path
+ CXN network path
+ CXR resource pointer
+ CXS system pointer
     blacklist : char. cxid netowrks
+
+ CX:CXN:TESTNET0
+ 0:HTTP:CXR:TESTNET0:krha453l4k56nsdtf

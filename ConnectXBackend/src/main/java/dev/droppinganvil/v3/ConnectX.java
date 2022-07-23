@@ -7,7 +7,6 @@ package dev.droppinganvil.v3;
 
 import dev.droppinganvil.v3.api.CXPlugin;
 import dev.droppinganvil.v3.crypt.core.CryptProvider;
-import dev.droppinganvil.v3.crypt.core.exceptions.DecryptionFailureException;
 import dev.droppinganvil.v3.crypt.pgpainless.PainlessCryptProvider;
 import dev.droppinganvil.v3.exceptions.UnsafeKeywordException;
 import dev.droppinganvil.v3.io.IOJob;
@@ -17,7 +16,6 @@ import dev.droppinganvil.v3.network.CXNetwork;
 import dev.droppinganvil.v3.network.InputBundle;
 import dev.droppinganvil.v3.network.events.NetworkEvent;
 import dev.droppinganvil.v3.network.nodemesh.Node;
-import dev.droppinganvil.v3.network.nodemesh.NodeMesh;
 import dev.droppinganvil.v3.network.nodemesh.OutputBundle;
 import dev.droppinganvil.v3.network.nodemesh.PeerDirectory;
 import dev.droppinganvil.v3.resourcecore.Availability;
@@ -39,6 +37,7 @@ public class ConnectX {
     private static ConcurrentHashMap<String, CXNetwork> networkMap = new ConcurrentHashMap<>();
     public static final CryptProvider encryptionProvider = new PainlessCryptProvider();
     private static final transient ConcurrentHashMap<String, SerializationProvider> serializationProviders = new ConcurrentHashMap<>();
+    public static final ConcurrentHashMap<String, >
     public final Queue<IOJob> jobQueue = new ConcurrentLinkedQueue<>();
     public static final Queue<InputBundle> eventQueue = new ConcurrentLinkedQueue<>();
     public static final Queue<OutputBundle> outputQueue = new ConcurrentLinkedQueue<>();
@@ -131,7 +130,7 @@ public class ConnectX {
     }
     public static File locateResourceDIR(Resource resource) {
         //TESTNET0.cxID.rrrrrrrrrrrrrrrrrrrrrrrr 25
-        String[] spl = resource.resourceID.split("\\.");
+        String[] spl = resource.rID.split("\\.");
         File network = new File(cxRoot, spl[0]);
         if (!network.exists()) return null;
         File f = new File(network, spl[1]);

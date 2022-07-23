@@ -10,6 +10,7 @@ public class TransmitPref {
     public boolean peerProxy = false;
     public boolean peerBroad = true;
     public String proxy = null;
+    public String bridge = null;
 
     public TransmitPref() {
 

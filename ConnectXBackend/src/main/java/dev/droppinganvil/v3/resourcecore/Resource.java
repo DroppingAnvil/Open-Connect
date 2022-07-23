@@ -13,13 +13,25 @@ import java.io.Serializable;
 import java.util.List;
 
 public class Resource implements Serializable {
+    /**
+     * Resource ID
+     * CXpath.
+     */
+    public String rID;
+    public Long rV;
+    public String oID;
     public ResourceType rt = null;
     public Availability a = null;
-    public String resourceID;
-    public String resourceLocation;
+    /**
+     * Location of resource on system if present
+     */
+    private String resourceLocation;
     public List<String> locations;
     public String hash;
-    public Object resource;
+    public Object o;
+    public Object getObject(Class<?> clazz) {
+
+    }
 
     public Resource publish(CXNetwork cxnet, ResourceType type, Availability availability, String hash, String resourceLocation, Object o) throws IllegalAccessException {
         assert locations == null;
