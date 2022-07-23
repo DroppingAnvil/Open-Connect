@@ -1,6 +1,5 @@
 package dev.droppinganvil.v3.io;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.droppinganvil.v3.ConnectX;
 import dev.droppinganvil.v3.analytics.AnalyticData;
 import dev.droppinganvil.v3.analytics.Analytics;
@@ -13,13 +12,11 @@ import dev.droppinganvil.v3.network.nodemesh.NodeConfig;
 import dev.droppinganvil.v3.network.nodemesh.NodeMesh;
 import dev.droppinganvil.v3.network.events.NetworkEvent;
 import dev.droppinganvil.v3.utils.obj.BaseStatus;
-import org.pgpainless.decryption_verification.OpenPgpMetadata;
 
 import java.io.*;
 import java.net.Socket;
 
 public class IOThread implements Runnable {
-    private static ObjectMapper mapper = new ObjectMapper();
     public boolean run = false;
     public Long sleep;
     public BaseStatus status;

@@ -14,12 +14,14 @@ import dev.droppinganvil.v3.network.events.NetworkEvent;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
 public class NodeMesh {
     public static ServerSocket serverSocket;
+    public static ConcurrentHashMap<String, ArrayList<String>> transmissionIDMap = new ConcurrentHashMap<>();
     public static ConcurrentHashMap<String, Integer> timeout = new ConcurrentHashMap<>();
     public static ConcurrentHashMap<String, String> blacklist = new ConcurrentHashMap<>();
     public static PeerDirectory peers;
@@ -47,6 +49,7 @@ public class NodeMesh {
         try {
             nc = (NetworkContainer) ConnectX.deserialize("cxJSON1", networkContainer, NetworkContainer.class);
             if (nc.cxID != null) ConnectX.checkSafety(nc.cxID);
+            assert nc.cxV != null;
             if (!ConnectX.isProviderPresent(nc.serialization)) {
                 socket.close();
                 Analytics.addData(AnalyticData.Tear, "Unsupported serialization method "+nc.serialization);
@@ -95,6 +98,7 @@ public class NodeMesh {
                 Analytics.addData(AnalyticData.Tear, "Unsupported event - "+ib.ne.eventType);
                 if (NodeConfig.supportUnavailableServices) {
                     ConnectX.recordEvent(ib.ne);
+                    //todo relay
                 }
                 return;
             }

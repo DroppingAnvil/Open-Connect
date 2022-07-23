@@ -6,6 +6,7 @@ import dev.droppinganvil.v3.network.events.NetworkContainer;
 import dev.droppinganvil.v3.network.events.NetworkEvent;
 
 import java.net.Socket;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class OutConnectionController {
     public ConnectX connectXAPI;
@@ -26,6 +27,7 @@ public class OutConnectionController {
                 //TODO
             } else {
                 nc.cxID = ConnectX.getOwnID();
+                if (NodeConfig.revealVersion) nc.cxV = NodeConfig.cxV;
                 cryptEvent = ConnectX.signObject(out.ne, NetworkEvent.class, nc.serialization).toByteArray();
             }
         }

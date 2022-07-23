@@ -18,12 +18,16 @@ public class NetworkDictionary implements Serializable {
     public String nmi;
     public String networkID;
     public Long networkCreate;
+    /**
+     * When this object was last updated
+     */
     public Long lastUpdate;
     /**
-     * Chain IDs
+     * Base chain IDs
      */
     public Long c1;
     public Long c2;
+    public Long c3;
     /**
      * Public keys of authorized backend nodes, in perspective of network master
      */

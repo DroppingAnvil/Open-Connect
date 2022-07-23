@@ -29,6 +29,8 @@ public class NodeConfig {
     public static Integer IO_INPUT_SKIP = 2048;
     public static Integer IO_MAX_INPUT = 10000000;
     public static boolean autoUpdate = true;
+    public static boolean revealVersion = true;
     public static boolean supportUnavailableServices = false;
     public static boolean devMode = false;
+    public static Double cxV = 0.1;
 }

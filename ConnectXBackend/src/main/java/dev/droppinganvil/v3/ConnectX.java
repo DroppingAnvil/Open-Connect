@@ -72,6 +72,7 @@ public class ConnectX {
             if (!nodemesh.exists()) if (!nodemesh.mkdir()) throw new IOException();
         }
         //TODO network join
+
     }
     public static void checkSafety(String s) throws UnsafeKeywordException {
         //TODO filesystem safety

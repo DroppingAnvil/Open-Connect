@@ -5,6 +5,8 @@
 
 package dev.droppinganvil.v3.network.events;
 
+import dev.droppinganvil.v3.network.nodemesh.TransmitPref;
+
 import java.io.Serializable;
 
 /**
@@ -21,5 +23,8 @@ public class NetworkContainer implements Serializable {
      * Will be null if s = true
      */
     public String cxID;
+    public TransmitPref tP;
+    public Double cxV;
+    public String tID;
 
 }
