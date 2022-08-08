@@ -1,17 +1,14 @@
 package dev.droppinganvil.v3.network.nodemesh;
 
+import dev.droppinganvil.v3.network.CXPath;
+
 import java.io.Serializable;
-import java.util.List;
 
 public class Node implements Serializable {
     /**
-     * HTTP URL for connection
+     * Path to node for server use cases
      */
-    public String path;
-    /**
-     * Address for connection
-     */
-    public String addr;
+    public CXPath path;
     /**
      * Device's network account id
      */
@@ -20,18 +17,6 @@ public class Node implements Serializable {
      * Node public key
      */
     public String publicKey;
-    /**
-     * public key's ID
-     */
-    public Long keyID;
-    /**
-     * Roles node provides
-     */
-    public List<String> roles;
-    /**
-     * User defined non unique device name
-     */
-    public String nicename;
     /**
      * For future use RESERVED
      */

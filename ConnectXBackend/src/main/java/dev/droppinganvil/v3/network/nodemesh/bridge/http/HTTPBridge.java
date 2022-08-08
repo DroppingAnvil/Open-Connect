@@ -5,10 +5,10 @@
 
 package dev.droppinganvil.v3.network.nodemesh.bridge.http;
 
+import dev.droppinganvil.v3.network.CXPath;
 import dev.droppinganvil.v3.network.nodemesh.OutputBundle;
 import dev.droppinganvil.v3.network.nodemesh.bridge.CXBridge;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
+import okhttp3.*;
 
 import java.net.Socket;
 
@@ -20,6 +20,7 @@ import java.net.Socket;
  */
 public class HTTPBridge implements CXBridge {
     public static OkHttpClient httpClient;
+    public static final MediaType jsonType = MediaType.get("application/json; charset=utf-8");
 
     @Override
     public String getProtocol() {
@@ -37,7 +38,7 @@ public class HTTPBridge implements CXBridge {
     }
 
     @Override
-    public Socket connect(OutputBundle ob) {
+    public Socket connect(CXPath path) {
         return null;
     }
 
@@ -47,9 +48,11 @@ public class HTTPBridge implements CXBridge {
     }
 
     @Override
-    public boolean transmitEvent(OutputBundle ob, byte[] data) {
-
-        Request r = new Request.Builder().u
+    public boolean transmitEvent(CXPath path, byte[] data) {
+        RequestBody rb = RequestBody.create(data, jsonType);
+        Request r = new Request.Builder().url(path.bridgeArg).post(rb).build();
+        Response rr = httpClient.newCall(r).execute();
+        rr.
         return false;
     }
 }

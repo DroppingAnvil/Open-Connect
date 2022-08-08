@@ -10,6 +10,7 @@ public class CXPath {
     public String bridge;
     public String bridgeArg;
     public String network;
+    public String address;
     public String cxID;
     public Integer version;
     public String resourceID;
