@@ -5,6 +5,7 @@
 
 package dev.droppinganvil.v3.network.events;
 
+import dev.droppinganvil.v3.network.CXPath;
 import dev.droppinganvil.v3.network.nodemesh.TransmitPref;
 
 import java.io.Serializable;
@@ -13,8 +14,10 @@ import java.io.Serializable;
  * This data should not be E2E it must be P2P to work effectively
  */
 public class NetworkContainer implements Serializable {
-    public byte[] event;
-    public String serialization = "cxJSON1";
+    public byte[] e;
+
+    public CXPath p;
+    public String se = "cxJSON1";
     /**
      * Higher security mode - Not implemented, do not use
      */
@@ -22,9 +25,9 @@ public class NetworkContainer implements Serializable {
     /**
      * Will be null if s = true
      */
-    public String cxID;
+    public String iD;
     public TransmitPref tP;
-    public Double cxV;
+    public Double v;
     public String tID;
 
 }

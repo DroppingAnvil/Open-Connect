@@ -18,6 +18,7 @@ import dev.droppinganvil.v3.network.events.NetworkEvent;
 import dev.droppinganvil.v3.network.nodemesh.Node;
 import dev.droppinganvil.v3.network.nodemesh.OutputBundle;
 import dev.droppinganvil.v3.network.nodemesh.PeerDirectory;
+import dev.droppinganvil.v3.network.nodemesh.bridge.CXBridge;
 import dev.droppinganvil.v3.resourcecore.Availability;
 import dev.droppinganvil.v3.resourcecore.Resource;
 import dev.droppinganvil.v3.resourcecore.ResourceType;
@@ -37,11 +38,13 @@ public class ConnectX {
     private static ConcurrentHashMap<String, CXNetwork> networkMap = new ConcurrentHashMap<>();
     public static final CryptProvider encryptionProvider = new PainlessCryptProvider();
     private static final transient ConcurrentHashMap<String, SerializationProvider> serializationProviders = new ConcurrentHashMap<>();
-    public static final ConcurrentHashMap<String, >
+    public static final ConcurrentHashMap<String, CXBridge> bridgeMap = new ConcurrentHashMap<>();
     public final Queue<IOJob> jobQueue = new ConcurrentLinkedQueue<>();
     public static final Queue<InputBundle> eventQueue = new ConcurrentLinkedQueue<>();
     public static final Queue<OutputBundle> outputQueue = new ConcurrentLinkedQueue<>();
     public static File cxRoot = new File("ConnectX");
+    public static File nodemesh;
+    public static File resources;
     private transient static CXNetwork cx;
     private static transient Node self;
     private static ConcurrentHashMap<String, CXPlugin> plugins = new ConcurrentHashMap<>();
@@ -67,8 +70,10 @@ public class ConnectX {
         //Setup filesystem
         if (!cxRoot.exists()) {
             if (!cxRoot.mkdir()) throw new IOException();
-            File nodemesh = new File(cxRoot, "nodemesh");
+            nodemesh = new File(cxRoot, "nodemesh");
             if (!nodemesh.exists()) if (!nodemesh.mkdir()) throw new IOException();
+            resources = new File(nodemesh, "nodemesh-resources");
+            if (!resources.exists()) if (!resources.mkdir()) throw new IOException();
         }
         //TODO network join
 
@@ -128,15 +133,6 @@ public class ConnectX {
         assert !cxID.contains("SYSTEM");
         return cx.checkNetworkPermission(cxID, permission);
     }
-    public static File locateResourceDIR(Resource resource) {
-        //TESTNET0.cxID.rrrrrrrrrrrrrrrrrrrrrrrr 25
-        String[] spl = resource.rID.split("\\.");
-        File network = new File(cxRoot, spl[0]);
-        if (!network.exists()) return null;
-        File f = new File(network, spl[1]);
-        if (!f.exists()) return null;
-        return f;
-    }
     public Resource locateResource(String networkID, ResourceType type, Availability availability) {
 
     }
@@ -174,6 +170,19 @@ public class ConnectX {
                 PeerDirectory.lan.put(n.cxID, n);
             }
         }
+    }
+
+    public static boolean isPeerLoaded(String cxID) {
+        return PeerDirectory.peerCache.containsKey(cxID);
+    }
+
+    public static void loadPeer(String cxID, boolean sync, boolean lookups) {
+        PeerDirectory.
+    }
+
+    public static boolean connectBridge(CXBridge cxBridge) {
+        if (bridgeMap.containsKey(cxBridge.protocol)) return false;
+        bridgeMap.put(cxBridge.)
     }
 
 

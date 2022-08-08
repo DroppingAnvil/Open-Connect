@@ -8,3 +8,6 @@ paths
 
  CX:CXN:TESTNET0
  0:HTTP:CXR:TESTNET0:krha453l4k56nsdtf
+
+ cobj.cx Application specific data
+ robj.cx Resource data

@@ -1,21 +1,21 @@
 package dev.droppinganvil.v3.network.events;
 
 
-import dev.droppinganvil.v3.network.nodemesh.Node;
+import dev.droppinganvil.v3.network.CXPath;
 
 import java.io.Serializable;
 
 public class NetworkEvent implements Serializable {
 
-    public NetworkEvent(EventType type, byte[] data) {
-        this.eventType = type.name();
-        this.data = data;
+    public NetworkEvent(EventType type, byte[] d) {
+        this.eT = type.name();
+        this.d = d;
 
     }
 
-    public String eventType;
-    public
-    public String cxID;
+    public String eT;
+    public CXPath p;
+    public String iD;
     /**
      * Method for processing
      */
@@ -23,5 +23,5 @@ public class NetworkEvent implements Serializable {
     /**
      * Event specific data
      */
-    public byte[] data;
+    public byte[] d;
 }

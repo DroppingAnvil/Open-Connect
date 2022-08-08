@@ -27,6 +27,12 @@
     </properties>
 
     <dependencies>
+        <!-- https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp -->
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>LATEST</version>
+        </dependency>
         <dependency>
             <groupId>us.anvildevelopment</groupId>
             <artifactId>Util2</artifactId>

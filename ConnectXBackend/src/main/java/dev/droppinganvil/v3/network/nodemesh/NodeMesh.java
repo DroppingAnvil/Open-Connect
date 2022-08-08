@@ -48,26 +48,26 @@ public class NodeMesh {
         String networkContainer = baos.toString("UTF-8");
         try {
             nc = (NetworkContainer) ConnectX.deserialize("cxJSON1", networkContainer, NetworkContainer.class);
-            if (nc.cxID != null) ConnectX.checkSafety(nc.cxID);
-            assert nc.cxV != null;
-            if (!ConnectX.isProviderPresent(nc.serialization)) {
+            if (nc.iD != null) ConnectX.checkSafety(nc.iD);
+            assert nc.v != null;
+            if (!ConnectX.isProviderPresent(nc.se)) {
                 socket.close();
-                Analytics.addData(AnalyticData.Tear, "Unsupported serialization method "+nc.serialization);
+                Analytics.addData(AnalyticData.Tear, "Unsupported serialization method "+nc.se);
                 return;
             }
             is.close();
             baos.close();
-            bais = new ByteArrayInputStream(nc.event);
+            bais = new ByteArrayInputStream(nc.e);
             Object o1;
             if (nc.s) {
                 //TODO verification of full encrypt
                 throw new DecryptionFailureException();
                 //o1 = ConnectX.encryptionProvider.decrypt(bais, baoss);
             } else {
-                o1 = ConnectX.encryptionProvider.verifyAndStrip(bais, baoss, nc.cxID);
+                o1 = ConnectX.encryptionProvider.verifyAndStrip(bais, baoss, nc.iD);
             }
             networkEvent = baos.toString("UTF-8");
-            ne = (NetworkEvent) ConnectX.deserialize(nc.serialization, networkEvent, NetworkEvent.class);
+            ne = (NetworkEvent) ConnectX.deserialize(nc.se, networkEvent, NetworkEvent.class);
             bais.close();
             baoss.close();
         } catch (Exception e) {
@@ -92,10 +92,10 @@ public class NodeMesh {
             InputBundle ib = ConnectX.eventQueue.poll();
             EventType et = null;
             try {
-                et = EventType.valueOf(ib.ne.eventType);
+                et = EventType.valueOf(ib.ne.eT);
             } catch (Exception ignored) {}
-            if (et == null & !ConnectX.sendPluginEvent(ib.ne, ib.ne.eventType)) {
-                Analytics.addData(AnalyticData.Tear, "Unsupported event - "+ib.ne.eventType);
+            if (et == null & !ConnectX.sendPluginEvent(ib.ne, ib.ne.eT)) {
+                Analytics.addData(AnalyticData.Tear, "Unsupported event - "+ib.ne.eT);
                 if (NodeConfig.supportUnavailableServices) {
                     ConnectX.recordEvent(ib.ne);
                     //todo relay
@@ -107,7 +107,7 @@ public class NodeMesh {
                 switch (et) {
                     case NewNode:
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        ByteArrayInputStream bais = new ByteArrayInputStream(ib.nc.event);
+                        ByteArrayInputStream bais = new ByteArrayInputStream(ib.nc.e);
                         Object o = ConnectX.encryptionProvider.decrypt(bais, baos);
                         Node node = ConnectX.deserialize("cxJSON1", baos.toString("UTF-8"), Node.class);
                         Node node1 = PeerDirectory.lookup(node.cxID, true, true);
@@ -127,7 +127,7 @@ public class NodeMesh {
                 if
             }
         }
-        if (ne.eventType.equalsIgnoreCase(EventType.PeerFinding.name())) {
+        if (ne.eT.equalsIgnoreCase(EventType.PeerFinding.name())) {
 
         }
     }
